@@ -268,7 +268,7 @@ footer{background:#111;}
       <div style="display:none;" class="lg-show">
         <div style="position:relative;width:100%;max-width:400px;margin:0 auto;">
           <div style="position:absolute;top:-16px;left:-16px;right:16px;bottom:16px;border:1px solid rgba(201,166,107,0.3);"></div>
-          <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=700&q=80" alt="SKADI Joias" style="width:100%;height:440px;object-fit:cover;position:relative;z-index:1;display:block;"/>
+          <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=700&q=80" alt="SKADI Joias" class="hero-img-layout" style="width:100%;height:440px;object-fit:cover;position:relative;z-index:1;display:block;"/>
           <div style="position:absolute;bottom:20px;right:-20px;z-index:2;background:var(--ouro);color:white;padding:14px 18px;text-align:center;">
             <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:500;line-height:1;">100%</div>
             <div style="font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;margin-top:3px;">Banhadas a Ouro</div>
@@ -319,7 +319,7 @@ footer{background:#111;}
       <a href="#colecao" class="btn-ouro">Conhecer Coleção</a>
     </div>
     <div style="display:none;" class="lg-show">
-      <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=80" alt="Sobre SKADI" style="width:72%;height:360px;object-fit:cover;display:block;"/>
+      <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=80" alt="Sobre SKADI" class="sobre-img-layout" style="width:72%;height:360px;object-fit:cover;display:block;"/>
     </div>
   </div>
 </section>
@@ -429,8 +429,6 @@ footer{background:#111;}
     <button id="fechar-admin-btn" style="background:none;border:none;color:white;font-size:1.7rem;cursor:pointer;padding:4px 8px;line-height:1;">✕</button>
   </div>
   <div class="admin-body">
-    <div class="admin-aviso">💾 Dados salvos no <strong>Supabase</strong> — persistem em qualquer dispositivo.</div>
-
     <!-- Stats -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;">
       <div class="admin-card" style="text-align:center;margin-bottom:0;"><div id="stat-total" style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--ouro);">—</div><div class="t-label" style="color:var(--cinza);margin-top:4px;">Produtos</div></div>
@@ -456,9 +454,18 @@ footer{background:#111;}
         <input type="text" id="p-badge" class="admin-input" placeholder="Ex: Últimas unidades • Só hoje • Imperdível"/>
       </div>
       <div style="margin-bottom:18px;">
-        <label class="admin-label">Link da Foto (URL direta) *</label>
-        <input type="url" id="p-foto" class="admin-input" placeholder="https://i.imgur.com/SUA-FOTO.jpg"/>
-        <p style="font-size:0.8rem;color:var(--cinza);margin-top:6px;">💡 <a href="https://imgur.com" target="_blank" style="color:var(--ouro);">imgur.com</a> ou <a href="https://postimages.org" target="_blank" style="color:var(--ouro);">postimages.org</a> — cole o link direto da imagem.</p>
+        <label class="admin-label">Foto do Produto *</label>
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
+          <img id="prev-foto-prod" src="" style="width:72px;height:72px;object-fit:cover;border:1px solid var(--cinza-claro);border-radius:2px;display:none;flex-shrink:0;"/>
+          <div style="flex:1;">
+            <input type="url" id="p-foto" class="admin-input" placeholder="Cole um link OU use o botão abaixo" style="margin-bottom:8px;"/>
+            <label class="admin-btn azul" style="cursor:pointer;padding:12px 16px;font-size:0.8rem;width:auto;display:inline-flex;">
+              📷 Upload direto do celular/computador
+              <input type="file" id="up-foto-prod" accept="image/*" style="display:none;"/>
+            </label>
+          </div>
+        </div>
+        <p style="font-size:0.78rem;color:var(--cinza);">💡 Você pode subir a foto diretamente <strong>ou</strong> colar um link de <a href="https://imgur.com" target="_blank" style="color:var(--ouro);">imgur.com</a> / <a href="https://postimages.org" target="_blank" style="color:var(--ouro);">postimages.org</a></p>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button id="btn-salvar-prod" class="admin-btn" style="flex:1;">💾 Salvar Produto</button>
@@ -488,9 +495,65 @@ footer{background:#111;}
         <div><label class="admin-label">URL do Site</label><input type="url" id="cfg-site-url" class="admin-input" placeholder="https://infinitylabs83.github.io/skadi/"/></div>
       </div>
       <div style="margin-bottom:12px;"><label class="admin-label">Banner do topo (vazio = ocultar)</label><input type="text" id="cfg-banner" class="admin-input" placeholder="Ex: 🎁 Frete grátis acima de R$ 200!"/></div>
-      <div style="margin-bottom:12px;"><label class="admin-label">Barra de Garantia</label><input type="text" id="cfg-garantia" class="admin-input" placeholder="🔄 Troca em 7 dias • 🎁 Embalagem para presente • 🚚 Frete grátis acima de R$ 200"/></div>
-      <div style="margin-bottom:18px;"><label class="admin-label">URL do Vídeo Hero (opcional — MP4 direto)</label><input type="url" id="cfg-video" class="admin-input" placeholder="https://... (deixe vazio para usar imagem)"/></div>
+      <div style="margin-bottom:18px;"><label class="admin-label">Barra de Garantia</label><input type="text" id="cfg-garantia" class="admin-input" placeholder="🔄 Troca em 7 dias • 🎁 Embalagem para presente • 🚚 Frete grátis acima de R$ 200"/></div>
       <button id="btn-salvar-config" class="admin-btn" style="width:auto;margin-bottom:0;">💾 Salvar Configurações</button>
+    </div>
+
+    <!-- IMAGENS DO SITE -->
+    <div class="admin-card">
+      <div class="admin-titulo">🖼️ Imagens do Site</div>
+      <p class="admin-subtitulo">Faça upload direto ou cole um link de imagem</p>
+
+      <div style="margin-bottom:20px;">
+        <label class="admin-label">Foto do Hero (imagem principal)</label>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+          <img id="prev-img-hero" src="" style="width:64px;height:64px;object-fit:cover;border:1px solid var(--cinza-claro);display:none;"/>
+          <div style="flex:1;">
+            <input type="url" id="cfg-img-hero" class="admin-input" placeholder="https://... ou use o botão ao lado" style="margin-bottom:6px;"/>
+            <label class="admin-btn azul" style="width:auto;cursor:pointer;padding:10px 16px;font-size:0.78rem;">
+              📷 Upload da Foto<input type="file" id="up-img-hero" accept="image/*" style="display:none;"/>
+            </label>
+          </div>
+        </div>
+        <button id="btn-salvar-img-hero" class="admin-btn verde" style="width:auto;">💾 Salvar Foto Hero</button>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label class="admin-label">Foto da Seção Sobre (esquerda)</label>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+          <img id="prev-img-sobre" src="" style="width:64px;height:64px;object-fit:cover;border:1px solid var(--cinza-claro);display:none;"/>
+          <div style="flex:1;">
+            <input type="url" id="cfg-img-sobre" class="admin-input" placeholder="https://... ou use o botão ao lado" style="margin-bottom:6px;"/>
+            <label class="admin-btn azul" style="width:auto;cursor:pointer;padding:10px 16px;font-size:0.78rem;">
+              📷 Upload da Foto<input type="file" id="up-img-sobre" accept="image/*" style="display:none;"/>
+            </label>
+          </div>
+        </div>
+        <button id="btn-salvar-img-sobre" class="admin-btn verde" style="width:auto;">💾 Salvar Foto Sobre</button>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label class="admin-label">Vídeo Hero (opcional — substitui a foto principal)</label>
+        <p style="font-size:0.8rem;color:var(--cinza);margin-bottom:8px;">Use um arquivo MP4. Você pode subir pelo botão abaixo ou colar um link direto.</p>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+          <div style="flex:1;">
+            <input type="url" id="cfg-video" class="admin-input" placeholder="https://... ou use o botão ao lado" style="margin-bottom:6px;"/>
+            <label class="admin-btn azul" style="width:auto;cursor:pointer;padding:10px 16px;font-size:0.78rem;">
+              🎬 Upload do Vídeo<input type="file" id="up-video" accept="video/mp4,video/*" style="display:none;"/>
+            </label>
+          </div>
+        </div>
+        <button id="btn-salvar-video" class="admin-btn verde" style="width:auto;">💾 Salvar Vídeo</button>
+      </div>
+    </div>
+
+    <!-- TROCAR SENHA -->
+    <div class="admin-card">
+      <div class="admin-titulo">🔐 Trocar Senha do Admin</div>
+      <div style="margin-bottom:12px;"><label class="admin-label">Senha Atual</label><input type="password" id="senha-atual" class="admin-input" placeholder="Digite a senha atual"/></div>
+      <div style="margin-bottom:12px;"><label class="admin-label">Nova Senha</label><input type="password" id="senha-nova" class="admin-input" placeholder="Digite a nova senha"/></div>
+      <div style="margin-bottom:18px;"><label class="admin-label">Confirmar Nova Senha</label><input type="password" id="senha-confirma" class="admin-input" placeholder="Repita a nova senha"/></div>
+      <button id="btn-trocar-senha" class="admin-btn" style="width:auto;">🔐 Trocar Senha</button>
     </div>
 
     <!-- TEXTOS EDITÁVEIS -->
@@ -560,7 +623,7 @@ footer{background:#111;}
 // ============================================================
 var SUPA_URL  = "https://dzjjaazgucxcpkdijehc.supabase.co";
 var SUPA_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amphYXpndWN4Y3BrZGlqZWhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MzMxOTYsImV4cCI6MjA5MjIwOTE5Nn0.FAAco55WJVMrwSYgqXXKr9zJsRJYaLZOxhVvYv3QHBs";
-var SENHA_ADM = "skadi2026";
+var SENHA_ADM = "skadi2026"; // senha padrão — será sobrescrita pelo banco
 
 function sb(tabela, opts) {
   opts = opts || {};
@@ -845,10 +908,12 @@ function aplicarConfig(m) {
   });
 
   var vid = document.getElementById("hero-video");
-  if (vid && m.video_url) {
-    vid.src = m.video_url;
-    vid.style.display = "block";
+  if (vid) {
+    if (m.video_url) { vid.src = m.video_url; vid.style.display = "block"; }
+    else vid.style.display = "none";
   }
+  // Imagens de layout
+  aplicarImgsLayout(m);
 }
 
 // ============================================================
@@ -1128,6 +1193,8 @@ function popularFormConfig(m) {
     "cfg-banner":      "banner",
     "cfg-garantia":    "garantia_texto",
     "cfg-video":       "video_url",
+    "cfg-img-hero":    "img_hero",
+    "cfg-img-sobre":   "img_sobre",
     "cfg-hero-titulo": "hero_titulo",
     "cfg-hero-sub":    "hero_sub",
     "cfg-sobre-titulo":"sobre_titulo",
@@ -1151,6 +1218,8 @@ function salvarConfigs(ids) {
     "cfg-banner":      "banner",
     "cfg-garantia":    "garantia_texto",
     "cfg-video":       "video_url",
+    "cfg-img-hero":    "img_hero",
+    "cfg-img-sobre":   "img_sobre",
     "cfg-hero-titulo": "hero_titulo",
     "cfg-hero-sub":    "hero_sub",
     "cfg-sobre-titulo":"sobre_titulo",
@@ -1182,7 +1251,10 @@ function fecharModal() {
   document.getElementById("msg-erro").style.display = "none";
 }
 function verificarSenha() {
-  if (document.getElementById("input-senha").value === SENHA_ADM) {
+  var digitada = document.getElementById("input-senha").value;
+  // Busca senha do banco (mais atualizada), com fallback para SENHA_ADM
+  var senhaAtual = STATE.cfg.senha_admin || SENHA_ADM;
+  if (digitada === senhaAtual) {
     fecharModal();
     document.getElementById("admin-overlay").style.display = "block";
     document.body.style.overflow = "hidden";
@@ -1195,6 +1267,62 @@ function fecharAdmin() {
   document.getElementById("admin-overlay").style.display = "none";
   document.body.style.overflow = "";
   limparForm();
+}
+
+// ============================================================
+// UPLOAD PARA SUPABASE STORAGE
+// ============================================================
+function uploadArquivo(file, bucket, callback) {
+  if (!file) return;
+  var ext  = file.name.split(".").pop();
+  var nome = Date.now() + "_" + Math.random().toString(36).substr(2,6) + "." + ext;
+  var url  = SUPA_URL + "/storage/v1/object/" + bucket + "/" + nome;
+  toast("⏳ Enviando arquivo...");
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "apikey":        SUPA_KEY,
+      "Authorization": "Bearer " + SUPA_KEY,
+      "Content-Type":  file.type,
+      "x-upsert":      "true"
+    },
+    body: file
+  }).then(function(r) {
+    if (!r.ok) return r.text().then(function(t) { throw new Error(t); });
+    var publicUrl = SUPA_URL + "/storage/v1/object/public/" + bucket + "/" + nome;
+    callback(publicUrl);
+  }).catch(function(e) {
+    toast("Erro no upload: " + e.message + ". Verifique se o bucket '" + bucket + "' existe no Supabase Storage.", "erro");
+    console.error("Upload erro:", e);
+  });
+}
+
+// ── Atualizar imagens de layout na página ao vivo
+function atualizarImgLayout(chave, url) {
+  if (chave === "img_hero") {
+    var imgs = document.querySelectorAll(".hero-img-layout");
+    imgs.forEach(function(img) { img.src = url; });
+  }
+  if (chave === "img_sobre") {
+    var imgs = document.querySelectorAll(".sobre-img-layout");
+    imgs.forEach(function(img) { img.src = url; });
+  }
+}
+
+// ── Aplicar imagens de layout vindas do banco
+function aplicarImgsLayout(m) {
+  if (m.img_hero) {
+    document.querySelectorAll(".hero-img-layout").forEach(function(img) { img.src = m.img_hero; });
+  }
+  if (m.img_sobre) {
+    document.querySelectorAll(".sobre-img-layout").forEach(function(img) { img.src = m.img_sobre; });
+  }
+  // Preencher previews no admin
+  var ph = document.getElementById("prev-img-hero");
+  var ps = document.getElementById("prev-img-sobre");
+  if (ph && m.img_hero) { ph.src = m.img_hero; ph.style.display = "block"; document.getElementById("cfg-img-hero").value = m.img_hero; }
+  if (ps && m.img_sobre) { ps.src = m.img_sobre; ps.style.display = "block"; document.getElementById("cfg-img-sobre").value = m.img_sobre; }
+  if (document.getElementById("cfg-video") && m.video_url) document.getElementById("cfg-video").value = m.video_url;
 }
 
 // ============================================================
@@ -1257,6 +1385,153 @@ document.addEventListener("DOMContentLoaded", function() {
   iniciarQuiz();
   document.getElementById("quiz-next").addEventListener("click", quizAvancar);
   document.getElementById("quiz-reiniciar").addEventListener("click", iniciarQuiz);
+
+  // Upload foto produto — preview + preencher campo URL
+  var upFotoProd = document.getElementById("up-foto-prod");
+  if (upFotoProd) {
+    upFotoProd.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "produtos", function(url) {
+        document.getElementById("p-foto").value = url;
+        var prev = document.getElementById("prev-foto-prod");
+        prev.src = url; prev.style.display = "block";
+        toast("✓ Foto carregada!");
+      });
+    });
+  }
+  // Preview ao digitar URL produto
+  var pFoto = document.getElementById("p-foto");
+  if (pFoto) {
+    pFoto.addEventListener("input", function() {
+      var prev = document.getElementById("prev-foto-prod");
+      if (this.value) { prev.src = this.value; prev.style.display = "block"; }
+      else prev.style.display = "none";
+    });
+  }
+
+  // Upload foto hero
+  var upHero = document.getElementById("up-img-hero");
+  if (upHero) {
+    upHero.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "layout", function(url) {
+        document.getElementById("cfg-img-hero").value = url;
+        var prev = document.getElementById("prev-img-hero");
+        prev.src = url; prev.style.display = "block";
+        toast("✓ Imagem carregada!");
+      });
+    });
+  }
+  var cfgHero = document.getElementById("cfg-img-hero");
+  if (cfgHero) {
+    cfgHero.addEventListener("input", function() {
+      var p = document.getElementById("prev-img-hero");
+      if (this.value) { p.src = this.value; p.style.display = "block"; }
+    });
+  }
+  var btnSalvHero = document.getElementById("btn-salvar-img-hero");
+  if (btnSalvHero) {
+    btnSalvHero.addEventListener("click", function() {
+      var url = document.getElementById("cfg-img-hero").value.trim();
+      if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
+      setBtn("btn-salvar-img-hero", true);
+      sb("config", { method:"PATCH", filtros:"chave=eq.img_hero", body:{ valor:url } })
+        .then(function() {
+          STATE.cfg.img_hero = url;
+          atualizarImgLayout("img_hero", url);
+          toast("✓ Foto do hero salva!");
+        })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-salvar-img-hero", false); });
+    });
+  }
+
+  // Upload foto sobre
+  var upSobre = document.getElementById("up-img-sobre");
+  if (upSobre) {
+    upSobre.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "layout", function(url) {
+        document.getElementById("cfg-img-sobre").value = url;
+        var prev = document.getElementById("prev-img-sobre");
+        prev.src = url; prev.style.display = "block";
+        toast("✓ Imagem carregada!");
+      });
+    });
+  }
+  var cfgSobre = document.getElementById("cfg-img-sobre");
+  if (cfgSobre) {
+    cfgSobre.addEventListener("input", function() {
+      var p = document.getElementById("prev-img-sobre");
+      if (this.value) { p.src = this.value; p.style.display = "block"; }
+    });
+  }
+  var btnSalvSobre = document.getElementById("btn-salvar-img-sobre");
+  if (btnSalvSobre) {
+    btnSalvSobre.addEventListener("click", function() {
+      var url = document.getElementById("cfg-img-sobre").value.trim();
+      if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
+      setBtn("btn-salvar-img-sobre", true);
+      sb("config", { method:"PATCH", filtros:"chave=eq.img_sobre", body:{ valor:url } })
+        .then(function() {
+          STATE.cfg.img_sobre = url;
+          atualizarImgLayout("img_sobre", url);
+          toast("✓ Foto da seção Sobre salva!");
+        })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-salvar-img-sobre", false); });
+    });
+  }
+
+  // Upload vídeo hero
+  var upVideo = document.getElementById("up-video");
+  if (upVideo) {
+    upVideo.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "layout", function(url) {
+        document.getElementById("cfg-video").value = url;
+        toast("✓ Vídeo carregado!");
+      });
+    });
+  }
+  var btnSalvVideo = document.getElementById("btn-salvar-video");
+  if (btnSalvVideo) {
+    btnSalvVideo.addEventListener("click", function() {
+      var url = document.getElementById("cfg-video").value.trim();
+      setBtn("btn-salvar-video", true);
+      sb("config", { method:"PATCH", filtros:"chave=eq.video_url", body:{ valor:url } })
+        .then(function() {
+          STATE.cfg.video_url = url;
+          var vid = document.getElementById("hero-video");
+          if (vid) { if (url) { vid.src = url; vid.style.display = "block"; } else { vid.style.display = "none"; } }
+          toast(url ? "✓ Vídeo hero salvo!" : "✓ Vídeo removido.");
+        })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-salvar-video", false); });
+    });
+  }
+
+  // Trocar senha
+  var btnSenha = document.getElementById("btn-trocar-senha");
+  if (btnSenha) {
+    btnSenha.addEventListener("click", function() {
+      var atual     = document.getElementById("senha-atual").value;
+      var nova      = document.getElementById("senha-nova").value.trim();
+      var confirma  = document.getElementById("senha-confirma").value.trim();
+      var senhaAtual = STATE.cfg.senha_admin || SENHA_ADM;
+      if (atual !== senhaAtual)   { toast("⚠️ Senha atual incorreta.", "erro"); return; }
+      if (!nova || nova.length < 4) { toast("⚠️ Nova senha deve ter ao menos 4 caracteres.", "erro"); return; }
+      if (nova !== confirma)      { toast("⚠️ As senhas não coincidem.", "erro"); return; }
+      setBtn("btn-trocar-senha", true);
+      sb("config", { method:"PATCH", filtros:"chave=eq.senha_admin", body:{ valor:nova } })
+        .then(function() {
+          STATE.cfg.senha_admin = nova;
+          SENHA_ADM = nova;
+          document.getElementById("senha-atual").value = "";
+          document.getElementById("senha-nova").value = "";
+          document.getElementById("senha-confirma").value = "";
+          toast("✓ Senha alterada com sucesso!");
+        })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-trocar-senha", false); });
+    });
+  }
 });
 </script>
 </body>
