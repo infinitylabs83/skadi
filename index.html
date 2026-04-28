@@ -2096,354 +2096,329 @@ function aplicarImgsLayout(m) {
 // INIT
 // ============================================================
 document.addEventListener("DOMContentLoaded", function() {
-  carregarTudo();
+  // ── Inicializar dados
+  try { carregarTudo(); } catch(e) { console.error("carregarTudo:", e); }
 
-  // Nav
-  document.getElementById("hamburger").addEventListener("click", function() {
-    document.getElementById("mobile-menu").classList.toggle("open");
-  });
-  ["mob-link-inicio","mob-link-colecao","mob-link-looks","mob-link-sobre"].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.addEventListener("click", function() { document.getElementById("mobile-menu").classList.remove("open"); });
-  });
+  // ── Navegação
+  try {
+    document.getElementById("hamburger").addEventListener("click", function() {
+      document.getElementById("mobile-menu").classList.toggle("open");
+    });
+    ["mob-link-inicio","mob-link-colecao","mob-link-looks","mob-link-sobre"].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener("click", function() { document.getElementById("mobile-menu").classList.remove("open"); });
+    });
+  } catch(e) { console.error("nav:", e); }
 
-  // Admin botões
-  document.getElementById("nav-admin-btn").addEventListener("click", abrirAdmin);
-  document.getElementById("desk-admin-btn").addEventListener("click", abrirAdmin);
-  document.getElementById("mob-admin-btn").addEventListener("click", function() {
-    document.getElementById("mobile-menu").classList.remove("open");
-    setTimeout(abrirAdmin, 100);
-  });
-  document.getElementById("fechar-admin-btn").addEventListener("click", fecharAdmin);
+  // ── Botões Admin (isolados em try/catch próprio)
+  try {
+    document.getElementById("nav-admin-btn").addEventListener("click", abrirAdmin);
+    document.getElementById("desk-admin-btn").addEventListener("click", abrirAdmin);
+    document.getElementById("mob-admin-btn").addEventListener("click", function() {
+      document.getElementById("mobile-menu").classList.remove("open");
+      setTimeout(abrirAdmin, 100);
+    });
+    document.getElementById("fechar-admin-btn").addEventListener("click", fecharAdmin);
+  } catch(e) { console.error("admin-btns:", e); }
 
-  // Modal senha
-  document.getElementById("btn-entrar").addEventListener("click", verificarSenha);
-  document.getElementById("btn-cancelar-modal").addEventListener("click", fecharModal);
-  document.getElementById("input-senha").addEventListener("keydown", function(e) { if(e.key==="Enter") verificarSenha(); });
+  // ── Modal Senha
+  try {
+    document.getElementById("btn-entrar").addEventListener("click", verificarSenha);
+    document.getElementById("btn-cancelar-modal").addEventListener("click", fecharModal);
+    document.getElementById("input-senha").addEventListener("keydown", function(e) { if(e.key==="Enter") verificarSenha(); });
+  } catch(e) { console.error("modal-senha:", e); }
 
-  // Produto
-  document.getElementById("btn-salvar-prod").addEventListener("click", salvarProduto);
-  document.getElementById("btn-cancelar-edicao").addEventListener("click", limparForm);
+  // ── Formulário Produto
+  try {
+    document.getElementById("btn-salvar-prod").addEventListener("click", salvarProduto);
+    document.getElementById("btn-cancelar-edicao").addEventListener("click", limparForm);
+  } catch(e) { console.error("form-prod:", e); }
 
-  // Mostrar campo tamanhos só para categorias relevantes
-  var catSelect = document.getElementById("p-categoria");
-  var tamField  = document.getElementById("tamanhos-field-wrap");
-  function toggleTamanhoField() {
-    var cat = catSelect ? catSelect.value : "";
-    var cats = ["Anéis", "Pulseiras", "Tornozeleiras"];
-    if (tamField) {
-      tamField.style.display = (cats.indexOf(cat) !== -1) ? "block" : "none";
+  // ── Tamanhos — mostrar/ocultar por categoria
+  try {
+    var catSelect = document.getElementById("p-categoria");
+    var tamField  = document.getElementById("tamanhos-field-wrap");
+    function toggleTamanhoField() {
+      var cat = catSelect ? catSelect.value : "";
+      var cats = ["Anéis", "Pulseiras", "Tornozeleiras"];
+      if (tamField) tamField.style.display = (cats.indexOf(cat) !== -1) ? "block" : "none";
     }
-  }
-  if (catSelect) {
-    catSelect.addEventListener("change", toggleTamanhoField);
-    toggleTamanhoField(); // estado inicial
-  }
+    if (catSelect) catSelect.addEventListener("change", toggleTamanhoField);
+    toggleTamanhoField();
+  } catch(e) { console.error("tamanhos:", e); }
 
-  // Look
-  document.getElementById("btn-salvar-look").addEventListener("click", salvarLook);
+  // ── Look
+  try {
+    document.getElementById("btn-salvar-look").addEventListener("click", salvarLook);
+  } catch(e) { console.error("look:", e); }
 
-  // Config geral
-  document.getElementById("btn-salvar-config").addEventListener("click", function() {
-    setBtn("btn-salvar-config", true);
-    salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video","cfg-pix-chave","cfg-pix-tipo","cfg-pix-nome","cfg-pix-qr"])
-      .then(function() { toast("✓ Configurações salvas!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
-      .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-      .finally(function() { setBtn("btn-salvar-config", false); });
-  });
+  // ── Configurações
+  try {
+    document.getElementById("btn-salvar-config").addEventListener("click", function() {
+      setBtn("btn-salvar-config", true);
+      salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video","cfg-pix-chave","cfg-pix-tipo","cfg-pix-nome","cfg-pix-qr"])
+        .then(function() { toast("✓ Configurações salvas!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-salvar-config", false); });
+    });
+  } catch(e) { console.error("config:", e); }
 
-  // Textos
-  document.getElementById("btn-salvar-textos").addEventListener("click", function() {
-    setBtn("btn-salvar-textos", true);
-    salvarConfigs(["cfg-hero-titulo","cfg-hero-sub","cfg-sobre-titulo","cfg-sobre-texto1","cfg-sobre-texto2",
-      "cfg-benef1-titulo","cfg-benef1-texto","cfg-benef2-titulo","cfg-benef2-texto",
-      "cfg-benef3-titulo","cfg-benef3-texto","cfg-benef4-titulo","cfg-benef4-texto"])
-      .then(function() { toast("✓ Textos salvos!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
-      .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-      .finally(function() { setBtn("btn-salvar-textos", false); });
-  });
+  // ── Textos
+  try {
+    document.getElementById("btn-salvar-textos").addEventListener("click", function() {
+      setBtn("btn-salvar-textos", true);
+      salvarConfigs(["cfg-hero-titulo","cfg-hero-sub","cfg-sobre-titulo","cfg-sobre-texto1","cfg-sobre-texto2",
+        "cfg-benef1-titulo","cfg-benef1-texto","cfg-benef2-titulo","cfg-benef2-texto",
+        "cfg-benef3-titulo","cfg-benef3-texto","cfg-benef4-titulo","cfg-benef4-texto"])
+        .then(function() { toast("✓ Textos salvos!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-salvar-textos", false); });
+    });
+  } catch(e) { console.error("textos:", e); }
 
-  // Lightbox
-  var lb = document.getElementById("lightbox");
-  var lbClose = document.getElementById("lightbox-close");
-  if (lb) {
-    lbClose.addEventListener("click", function() { lb.classList.remove("ativo"); });
-    lb.addEventListener("click", function(e) { if (e.target === lb) lb.classList.remove("ativo"); });
-  }
+  // ── Lightbox
+  try {
+    var lb = document.getElementById("lightbox");
+    var lbClose = document.getElementById("lightbox-close");
+    if (lb && lbClose) {
+      lbClose.addEventListener("click", function() { lb.classList.remove("ativo"); });
+      lb.addEventListener("click", function(e) { if (e.target === lb) lb.classList.remove("ativo"); });
+    }
+  } catch(e) { console.error("lightbox:", e); }
 
-  // Modal Produto
-  var mp = document.getElementById("modal-produto");
-  var mpClose = document.getElementById("modal-prod-close");
-  if (mp) {
-    // Fechar pelo X
-    if (mpClose) mpClose.addEventListener("click", fecharModalProduto);
-    // Fechar clicando no fundo
-    mp.addEventListener("click", function(e) { if (e.target === mp) fecharModalProduto(); });
-    // Fechar pelo Escape
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") {
-        fecharModalProduto();
-        if (lb) lb.classList.remove("ativo");
-      }
-    });
-    // Botão menos quantidade
-    document.getElementById("modal-qtd-menos").addEventListener("click", function() {
-      var el = document.getElementById("modal-qtd-num");
-      var v = parseInt(el.textContent) || 1;
-      if (v > 1) { v--; el.textContent = v; MODAL_PROD.quantidade = v; }
-    });
-    // Botão mais quantidade
-    document.getElementById("modal-qtd-mais").addEventListener("click", function() {
-      var el = document.getElementById("modal-qtd-num");
-      var v = parseInt(el.textContent) || 1;
-      if (v < 10) { v++; el.textContent = v; MODAL_PROD.quantidade = v; }
-    });
-    // Botão comprar
-    document.getElementById("modal-btn-comprar").addEventListener("click", function() {
-      var p = MODAL_PROD.produto;
-      if (!p) return;
-      window.open(wppLink(msgProduto(p, MODAL_PROD.tamanhoSel, MODAL_PROD.quantidade)), "_blank");
-    });
-    // Botão Pix
-    document.getElementById("modal-btn-pix").addEventListener("click", function() {
-      abrirModalPix();
-    });
-    // Botão presente
-    document.getElementById("modal-btn-presente").addEventListener("click", function() {
-      var p = MODAL_PROD.produto;
-      if (!p) return;
-      window.open(wppLink(msgPresente(p)), "_blank");
-    });
-    // Foto principal abre lightbox
-    var mpMainImg = document.getElementById("modal-prod-main-img");
-    if (mpMainImg) {
-      mpMainImg.addEventListener("click", function() {
-        if (!this.src) return;
-        var lbImg = document.getElementById("lightbox-img");
-        if (lbImg) lbImg.src = this.src;
-        if (lb) lb.classList.add("ativo");
+  // ── Modal Produto
+  try {
+    var mp = document.getElementById("modal-produto");
+    var mpClose = document.getElementById("modal-prod-close");
+    if (mp) {
+      if (mpClose) mpClose.addEventListener("click", fecharModalProduto);
+      mp.addEventListener("click", function(e) { if (e.target === mp) fecharModalProduto(); });
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") { fecharModalProduto(); fecharModalPix(); if (lb) lb.classList.remove("ativo"); }
       });
+      document.getElementById("modal-qtd-menos").addEventListener("click", function() {
+        var el = document.getElementById("modal-qtd-num");
+        var v = parseInt(el.textContent) || 1;
+        if (v > 1) { v--; el.textContent = v; MODAL_PROD.quantidade = v; }
+      });
+      document.getElementById("modal-qtd-mais").addEventListener("click", function() {
+        var el = document.getElementById("modal-qtd-num");
+        var v = parseInt(el.textContent) || 1;
+        if (v < 10) { v++; el.textContent = v; MODAL_PROD.quantidade = v; }
+      });
+      document.getElementById("modal-btn-comprar").addEventListener("click", function() {
+        var p = MODAL_PROD.produto; if (!p) return;
+        window.open(wppLink(msgProduto(p, MODAL_PROD.tamanhoSel, MODAL_PROD.quantidade)), "_blank");
+      });
+      document.getElementById("modal-btn-pix").addEventListener("click", function() { abrirModalPix(); });
+      document.getElementById("modal-btn-presente").addEventListener("click", function() {
+        var p = MODAL_PROD.produto; if (!p) return;
+        window.open(wppLink(msgPresente(p)), "_blank");
+      });
+      var mpMainImg = document.getElementById("modal-prod-main-img");
+      if (mpMainImg) {
+        mpMainImg.addEventListener("click", function() {
+          if (!this.src) return;
+          var lbImg = document.getElementById("lightbox-img");
+          if (lbImg) lbImg.src = this.src;
+          if (lb) lb.classList.add("ativo");
+        });
+      }
     }
-  }
+  } catch(e) { console.error("modal-produto:", e); }
 
   // ── Modal Pix
-  var mpix = document.getElementById("modal-pix");
-  var pixClose = document.getElementById("pix-close");
-  if (mpix) {
-    if (pixClose) pixClose.addEventListener("click", fecharModalPix);
-    mpix.addEventListener("click", function(e) { if (e.target === mpix) fecharModalPix(); });
-  }
-
-  // Copiar chave Pix
-  var pixCopiar = document.getElementById("pix-copiar-btn");
-  if (pixCopiar) {
-    pixCopiar.addEventListener("click", function() {
-      var chave = document.getElementById("pix-chave-valor").textContent;
-      if (!chave) return;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(chave).then(function() {
+  try {
+    var mpix = document.getElementById("modal-pix");
+    var pixClose = document.getElementById("pix-close");
+    if (mpix) {
+      if (pixClose) pixClose.addEventListener("click", fecharModalPix);
+      mpix.addEventListener("click", function(e) { if (e.target === mpix) fecharModalPix(); });
+    }
+    var pixCopiar = document.getElementById("pix-copiar-btn");
+    if (pixCopiar) {
+      pixCopiar.addEventListener("click", function() {
+        var chave = document.getElementById("pix-chave-valor").textContent;
+        if (!chave) return;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(chave).then(function() {
+            pixCopiar.textContent = "✓ Copiado!";
+            setTimeout(function() { pixCopiar.textContent = "Copiar"; }, 2000);
+          });
+        } else {
+          var ta = document.createElement("textarea");
+          ta.value = chave; document.body.appendChild(ta);
+          ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
           pixCopiar.textContent = "✓ Copiado!";
           setTimeout(function() { pixCopiar.textContent = "Copiar"; }, 2000);
+        }
+      });
+    }
+  } catch(e) { console.error("modal-pix:", e); }
+
+  // ── Uploads (imagens e vídeo)
+  try {
+    ["up-foto2","up-foto3","up-foto4"].forEach(function(upId) {
+      var el = document.getElementById(upId); if (!el) return;
+      el.addEventListener("change", function() {
+        var inputId = upId.replace("up-", "p-");
+        var inputEl = document.getElementById(inputId);
+        uploadArquivo(this.files[0], "produtos", function(url) {
+          if (inputEl) inputEl.value = url;
+          toast("✓ Foto carregada!");
         });
-      } else {
-        var ta = document.createElement("textarea");
-        ta.value = chave; document.body.appendChild(ta);
-        ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
-        pixCopiar.textContent = "✓ Copiado!";
-        setTimeout(function() { pixCopiar.textContent = "Copiar"; }, 2000);
-      }
-    });
-  }
-
-  // Upload QR Code Pix
-  var upPixQr = document.getElementById("up-pix-qr");
-  if (upPixQr) {
-    upPixQr.addEventListener("change", function() {
-      uploadArquivo(this.files[0], "layout", function(url) {
-        document.getElementById("cfg-pix-qr").value = url;
-        toast("✓ QR Code carregado!");
       });
     });
-  }
-
-  // Quiz
-  iniciarQuiz();
-  document.getElementById("quiz-next").addEventListener("click", quizAvancar);
-  document.getElementById("quiz-reiniciar").addEventListener("click", iniciarQuiz);
-
-  // Upload foto produto — preview + preencher campo URL
-  var upFotoProd = document.getElementById("up-foto-prod");
-  if (upFotoProd) {
-    upFotoProd.addEventListener("change", function() {
-      uploadArquivo(this.files[0], "produtos", function(url) {
-        document.getElementById("p-foto").value = url;
+    var upFotoProd = document.getElementById("up-foto-prod");
+    if (upFotoProd) {
+      upFotoProd.addEventListener("change", function() {
+        uploadArquivo(this.files[0], "produtos", function(url) {
+          document.getElementById("p-foto").value = url;
+          var prev = document.getElementById("prev-foto-prod");
+          if (prev) { prev.src = url; prev.style.display = "block"; }
+          toast("✓ Foto carregada!");
+        });
+      });
+    }
+    var pFoto = document.getElementById("p-foto");
+    if (pFoto) {
+      pFoto.addEventListener("input", function() {
         var prev = document.getElementById("prev-foto-prod");
-        prev.src = url; prev.style.display = "block";
-        toast("✓ Foto carregada!");
+        if (!prev) return;
+        if (this.value) { prev.src = this.value; prev.style.display = "block"; }
+        else prev.style.display = "none";
       });
-    });
-  }
-  // Preview ao digitar URL produto
-  var pFoto = document.getElementById("p-foto");
-  if (pFoto) {
-    pFoto.addEventListener("input", function() {
-      var prev = document.getElementById("prev-foto-prod");
-      if (this.value) { prev.src = this.value; prev.style.display = "block"; }
-      else prev.style.display = "none";
-    });
-  }
-
-  // Upload foto hero
-  var upHero = document.getElementById("up-img-hero");
-  if (upHero) {
-    upHero.addEventListener("change", function() {
-      uploadArquivo(this.files[0], "layout", function(url) {
-        document.getElementById("cfg-img-hero").value = url;
-        var prev = document.getElementById("prev-img-hero");
-        prev.src = url; prev.style.display = "block";
-        toast("✓ Imagem carregada!");
+    }
+    var upHero = document.getElementById("up-img-hero");
+    if (upHero) {
+      upHero.addEventListener("change", function() {
+        uploadArquivo(this.files[0], "layout", function(url) {
+          document.getElementById("cfg-img-hero").value = url;
+          var prev = document.getElementById("prev-img-hero");
+          if (prev) { prev.src = url; prev.style.display = "block"; }
+          toast("✓ Imagem carregada!");
+        });
       });
-    });
-  }
-  var cfgHero = document.getElementById("cfg-img-hero");
-  if (cfgHero) {
-    cfgHero.addEventListener("input", function() {
-      var p = document.getElementById("prev-img-hero");
-      if (this.value) { p.src = this.value; p.style.display = "block"; }
-    });
-  }
-  var btnSalvHero = document.getElementById("btn-salvar-img-hero");
-  if (btnSalvHero) {
-    btnSalvHero.addEventListener("click", function() {
-      var url = document.getElementById("cfg-img-hero").value.trim();
-      if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
-      setBtn("btn-salvar-img-hero", true);
-      sb("config", { method:"PATCH", filtros:"chave=eq.img_hero", body:{ valor:url } })
-        .then(function() {
-          STATE.cfg.img_hero = url;
-          atualizarImgLayout("img_hero", url);
-          toast("✓ Foto do hero salva!");
-        })
-        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-        .finally(function() { setBtn("btn-salvar-img-hero", false); });
-    });
-  }
-
-  // Upload foto sobre
-  var upSobre = document.getElementById("up-img-sobre");
-  if (upSobre) {
-    upSobre.addEventListener("change", function() {
-      uploadArquivo(this.files[0], "layout", function(url) {
-        document.getElementById("cfg-img-sobre").value = url;
-        var prev = document.getElementById("prev-img-sobre");
-        prev.src = url; prev.style.display = "block";
-        toast("✓ Imagem carregada!");
+    }
+    var cfgHero = document.getElementById("cfg-img-hero");
+    if (cfgHero) {
+      cfgHero.addEventListener("input", function() {
+        var p = document.getElementById("prev-img-hero");
+        if (p && this.value) { p.src = this.value; p.style.display = "block"; }
       });
-    });
-  }
-  var cfgSobre = document.getElementById("cfg-img-sobre");
-  if (cfgSobre) {
-    cfgSobre.addEventListener("input", function() {
-      var p = document.getElementById("prev-img-sobre");
-      if (this.value) { p.src = this.value; p.style.display = "block"; }
-    });
-  }
-  var btnSalvSobre = document.getElementById("btn-salvar-img-sobre");
-  if (btnSalvSobre) {
-    btnSalvSobre.addEventListener("click", function() {
-      var url = document.getElementById("cfg-img-sobre").value.trim();
-      if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
-      setBtn("btn-salvar-img-sobre", true);
-      sb("config", { method:"PATCH", filtros:"chave=eq.img_sobre", body:{ valor:url } })
-        .then(function() {
-          STATE.cfg.img_sobre = url;
-          atualizarImgLayout("img_sobre", url);
-          toast("✓ Foto da seção Sobre salva!");
-        })
-        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-        .finally(function() { setBtn("btn-salvar-img-sobre", false); });
-    });
-  }
-
-  // Upload fotos extras produto
-  ["up-foto2","up-foto3","up-foto4"].forEach(function(upId) {
-    var el = document.getElementById(upId);
-    if (!el) return;
-    el.addEventListener("change", function() {
-      var inputId = upId.replace("up-", "p-");
-      var inputEl = document.getElementById(inputId);
-      uploadArquivo(this.files[0], "produtos", function(url) {
-        if (inputEl) inputEl.value = url;
-        toast("✓ Foto carregada!");
+    }
+    var btnSalvHero = document.getElementById("btn-salvar-img-hero");
+    if (btnSalvHero) {
+      btnSalvHero.addEventListener("click", function() {
+        var url = document.getElementById("cfg-img-hero").value.trim();
+        if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
+        setBtn("btn-salvar-img-hero", true);
+        sb("config", { method:"PATCH", filtros:"chave=eq.img_hero", body:{ valor:url } })
+          .then(function() { STATE.cfg.img_hero = url; atualizarImgLayout("img_hero", url); toast("✓ Foto do hero salva!"); })
+          .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+          .finally(function() { setBtn("btn-salvar-img-hero", false); });
       });
-    });
-  });
-
-  // Upload vídeo hero
-  var upVideo = document.getElementById("up-video");
-  if (upVideo) {
-    upVideo.addEventListener("change", function() {
-      uploadArquivo(this.files[0], "layout", function(url) {
-        document.getElementById("cfg-video").value = url;
-        toast("✓ Vídeo carregado!");
+    }
+    var upSobre = document.getElementById("up-img-sobre");
+    if (upSobre) {
+      upSobre.addEventListener("change", function() {
+        uploadArquivo(this.files[0], "layout", function(url) {
+          document.getElementById("cfg-img-sobre").value = url;
+          var prev = document.getElementById("prev-img-sobre");
+          if (prev) { prev.src = url; prev.style.display = "block"; }
+          toast("✓ Imagem carregada!");
+        });
       });
-    });
-  }
-  var btnSalvVideo = document.getElementById("btn-salvar-video");
-  if (btnSalvVideo) {
-    btnSalvVideo.addEventListener("click", function() {
-      var url = document.getElementById("cfg-video").value.trim();
-      setBtn("btn-salvar-video", true);
-      sb("config", { method:"PATCH", filtros:"chave=eq.video_url", body:{ valor:url } })
-        .then(function() {
-          STATE.cfg.video_url = url;
-          var vid = document.getElementById("hero-video");
-          if (vid) {
-            if (url) {
-              vid.src = url;
-              vid.style.display = "block";
-              vid.muted = true;
-              vid.load();
-              vid.addEventListener("canplay", function() {
-                vid.play().catch(function() {});
-              }, { once: true });
-            } else {
-              vid.style.display = "none";
-              vid.src = "";
-            }
-          }
-          toast(url ? "✓ Vídeo hero salvo!" : "✓ Vídeo removido.");
-        })
-        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-        .finally(function() { setBtn("btn-salvar-video", false); });
-    });
-  }
+    }
+    var cfgSobre = document.getElementById("cfg-img-sobre");
+    if (cfgSobre) {
+      cfgSobre.addEventListener("input", function() {
+        var p = document.getElementById("prev-img-sobre");
+        if (p && this.value) { p.src = this.value; p.style.display = "block"; }
+      });
+    }
+    var btnSalvSobre = document.getElementById("btn-salvar-img-sobre");
+    if (btnSalvSobre) {
+      btnSalvSobre.addEventListener("click", function() {
+        var url = document.getElementById("cfg-img-sobre").value.trim();
+        if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
+        setBtn("btn-salvar-img-sobre", true);
+        sb("config", { method:"PATCH", filtros:"chave=eq.img_sobre", body:{ valor:url } })
+          .then(function() { STATE.cfg.img_sobre = url; atualizarImgLayout("img_sobre", url); toast("✓ Foto Sobre salva!"); })
+          .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+          .finally(function() { setBtn("btn-salvar-img-sobre", false); });
+      });
+    }
+    var upVideo = document.getElementById("up-video");
+    if (upVideo) {
+      upVideo.addEventListener("change", function() {
+        uploadArquivo(this.files[0], "layout", function(url) {
+          document.getElementById("cfg-video").value = url;
+          toast("✓ Vídeo carregado!");
+        });
+      });
+    }
+    var btnSalvVideo = document.getElementById("btn-salvar-video");
+    if (btnSalvVideo) {
+      btnSalvVideo.addEventListener("click", function() {
+        var url = document.getElementById("cfg-video").value.trim();
+        setBtn("btn-salvar-video", true);
+        sb("config", { method:"PATCH", filtros:"chave=eq.video_url", body:{ valor:url } })
+          .then(function() {
+            STATE.cfg.video_url = url;
+            var vid = document.getElementById("hero-video");
+            if (vid) { if (url) { vid.src = url; vid.style.display = "block"; vid.load(); vid.play().catch(function(){}); } else { vid.style.display = "none"; } }
+            toast(url ? "✓ Vídeo hero salvo!" : "✓ Vídeo removido.");
+          })
+          .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+          .finally(function() { setBtn("btn-salvar-video", false); });
+      });
+    }
+    var upPixQr = document.getElementById("up-pix-qr");
+    if (upPixQr) {
+      upPixQr.addEventListener("change", function() {
+        uploadArquivo(this.files[0], "layout", function(url) {
+          document.getElementById("cfg-pix-qr").value = url;
+          toast("✓ QR Code carregado!");
+        });
+      });
+    }
+  } catch(e) { console.error("uploads:", e); }
 
-  // Trocar senha
-  var btnSenha = document.getElementById("btn-trocar-senha");
-  if (btnSenha) {
-    btnSenha.addEventListener("click", function() {
-      var atual     = document.getElementById("senha-atual").value;
-      var nova      = document.getElementById("senha-nova").value.trim();
-      var confirma  = document.getElementById("senha-confirma").value.trim();
-      var senhaAtual = STATE.cfg.senha_admin || SENHA_ADM;
-      if (atual !== senhaAtual)   { toast("⚠️ Senha atual incorreta.", "erro"); return; }
-      if (!nova || nova.length < 4) { toast("⚠️ Nova senha deve ter ao menos 4 caracteres.", "erro"); return; }
-      if (nova !== confirma)      { toast("⚠️ As senhas não coincidem.", "erro"); return; }
-      setBtn("btn-trocar-senha", true);
-      sb("config", { method:"PATCH", filtros:"chave=eq.senha_admin", body:{ valor:nova } })
-        .then(function() {
-          STATE.cfg.senha_admin = nova;
-          SENHA_ADM = nova;
-          document.getElementById("senha-atual").value = "";
-          document.getElementById("senha-nova").value = "";
-          document.getElementById("senha-confirma").value = "";
-          toast("✓ Senha alterada com sucesso!");
-        })
-        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-        .finally(function() { setBtn("btn-trocar-senha", false); });
-    });
-  }
+  // ── Trocar senha
+  try {
+    var btnSenha = document.getElementById("btn-trocar-senha");
+    if (btnSenha) {
+      btnSenha.addEventListener("click", function() {
+        var atual    = document.getElementById("senha-atual").value;
+        var nova     = document.getElementById("senha-nova").value.trim();
+        var confirma = document.getElementById("senha-confirma").value.trim();
+        var senhaAtual = STATE.cfg.senha_admin || SENHA_ADM;
+        if (atual !== senhaAtual)    { toast("⚠️ Senha atual incorreta.", "erro"); return; }
+        if (!nova || nova.length < 4){ toast("⚠️ Nova senha deve ter ao menos 4 caracteres.", "erro"); return; }
+        if (nova !== confirma)       { toast("⚠️ As senhas não coincidem.", "erro"); return; }
+        setBtn("btn-trocar-senha", true);
+        sb("config", { method:"PATCH", filtros:"chave=eq.senha_admin", body:{ valor:nova } })
+          .then(function() {
+            STATE.cfg.senha_admin = nova; SENHA_ADM = nova;
+            document.getElementById("senha-atual").value = "";
+            document.getElementById("senha-nova").value = "";
+            document.getElementById("senha-confirma").value = "";
+            toast("✓ Senha alterada com sucesso!");
+          })
+          .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+          .finally(function() { setBtn("btn-trocar-senha", false); });
+      });
+    }
+  } catch(e) { console.error("senha:", e); }
+
+  // ── Quiz
+  try {
+    iniciarQuiz();
+    document.getElementById("quiz-next").addEventListener("click", quizAvancar);
+    document.getElementById("quiz-reiniciar").addEventListener("click", iniciarQuiz);
+  } catch(e) { console.error("quiz:", e); }
+
 });
 </script>
 </body>
