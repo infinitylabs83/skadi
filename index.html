@@ -42,6 +42,10 @@ body{margin:0;background:var(--bege);color:var(--preto);font-family:'Jost',sans-
 #inicio{min-height:100svh;background:linear-gradient(160deg,#1C1C1C 0%,#2d2416 55%,#1a1208 100%);display:flex;align-items:center;padding-top:68px;position:relative;overflow:hidden;}
 @media(min-width:768px){#inicio{padding-top:80px;}}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.25;z-index:0;pointer-events:none;}
+.hero-video::-webkit-media-controls{display:none !important;}
+.hero-video::-webkit-media-controls-panel{display:none !important;}
+.hero-video::-webkit-media-controls-play-button{display:none !important;}
+.hero-video::-webkit-media-controls-start-playback-button{display:none !important;}
 .hero-content{max-width:1280px;margin:0 auto;padding:40px 20px 48px;width:100%;position:relative;z-index:1;}
 @media(min-width:768px){.hero-content{padding:60px 32px 72px;}}
 .hero-grid{display:grid;gap:40px;align-items:center;}
@@ -210,6 +214,19 @@ footer{background:#111;}
 .d1{animation-delay:0.15s;}.d2{animation-delay:0.3s;}.d3{animation-delay:0.5s;}.d4{animation-delay:0.7s;}
 @keyframes spin{to{transform:rotate(360deg);}}
 @media(min-width:1024px){.lg-show{display:block !important;}}
+
+/* ── SKELETON LOADING ── */
+.skeleton{background:linear-gradient(90deg,#e8e3da 25%,#f0ece4 50%,#e8e3da 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.skeleton-card{background:white;border:1px solid var(--cinza-claro);overflow:hidden;}
+.skeleton-img{width:100%;padding-top:100%;position:relative;}
+.skeleton-img .skeleton{position:absolute;inset:0;}
+.skeleton-body{padding:14px;}
+.skeleton-line{height:12px;border-radius:2px;margin-bottom:8px;}
+.skeleton-line.w100{width:100%;}
+.skeleton-line.w70{width:70%;}
+.skeleton-line.w50{width:50%;}
+.skeleton-btn{height:38px;border-radius:2px;width:100%;margin-top:8px;}
 </style>
 </head>
 <body>
@@ -250,7 +267,7 @@ footer{background:#111;}
 
 <!-- HERO -->
 <section id="inicio">
-  <video id="hero-video" class="hero-video" autoplay muted loop playsinline style="display:none;"></video>
+  <video id="hero-video" class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" style="display:none;" poster=""></video>
   <div style="position:absolute;inset:0;pointer-events:none;z-index:0;">
     <div style="position:absolute;top:-15%;right:-8%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(201,166,107,0.07) 0%,transparent 70%);"></div>
   </div>
@@ -352,9 +369,10 @@ footer{background:#111;}
     <div class="filtros-wrap" id="filtros-wrap">
       <button class="filtro-btn ativo" data-cat="todos">Todos</button>
     </div>
-    <div id="loading-produtos" style="text-align:center;padding:40px;color:var(--cinza);">
-      <div style="width:36px;height:36px;border:3px solid var(--cinza-claro);border-top-color:var(--ouro);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
-      Carregando coleção...
+    <div id="loading-produtos">
+      <div id="skeleton-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <!-- Skeletons gerados via JS -->
+      </div>
     </div>
     <div id="produtos-grid"></div>
   </div>
@@ -714,48 +732,128 @@ function setBtn(id, loading) {
 // ============================================================
 // CARREGAR TUDO
 // ============================================================
+// ── CACHE local (stale-while-revalidate)
+var CACHE_KEY_PROD = "skadi_cache_produtos";
+var CACHE_KEY_CFG  = "skadi_cache_config";
+var CACHE_KEY_LOOK = "skadi_cache_looks";
+var CACHE_TTL      = 5 * 60 * 1000; // 5 minutos
+
+function cacheGet(key) {
+  try {
+    var raw = localStorage.getItem(key);
+    if (!raw) return null;
+    var obj = JSON.parse(raw);
+    if (Date.now() - obj.ts > CACHE_TTL) return null; // expirado
+    return obj.data;
+  } catch(e) { return null; }
+}
+
+function cacheSet(key, data) {
+  try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data: data })); }
+  catch(e) {}
+}
+
+function renderSkeleton(n) {
+  var grid = document.getElementById("skeleton-grid");
+  if (!grid) return;
+  var cols = window.innerWidth >= 900 ? 3 : (window.innerWidth >= 640 ? 2 : 2);
+  grid.style.gridTemplateColumns = "repeat(" + cols + ", 1fr)";
+  var h = "";
+  for (var i = 0; i < Math.min(n, 8); i++) {
+    h += "<div class='skeleton-card'>"
+       + "<div class='skeleton-img'><div class='skeleton'></div></div>"
+       + "<div class='skeleton-body'>"
+       + "<div class='skeleton-line w70 skeleton'></div>"
+       + "<div class='skeleton-line w100 skeleton'></div>"
+       + "<div class='skeleton-line w50 skeleton'></div>"
+       + "<div class='skeleton-btn skeleton'></div>"
+       + "</div></div>";
+  }
+  grid.innerHTML = h;
+}
+
 function carregarTudo() {
+  // ── CONFIG: cache primeiro, fetch em paralelo
+  var cfgCache = cacheGet(CACHE_KEY_CFG);
+  if (cfgCache) {
+    STATE.cfg = cfgCache;
+    STATE.siteUrl = cfgCache.site_url || "https://infinitylabs83.github.io/skadi";
+    aplicarConfig(cfgCache);
+  }
+
+  // ── PRODUTOS: cache primeiro → mostra imediatamente sem delay
+  var prodCache = cacheGet(CACHE_KEY_PROD);
+  if (prodCache && prodCache.length) {
+    STATE.produtos = prodCache;
+    renderFiltros();
+    renderLoja(STATE.produtos);
+    // Esconde skeleton, mostra grid
+    var lp = document.getElementById("loading-produtos");
+    if (lp) lp.style.display = "none";
+  } else {
+    // Sem cache: mostra skeletons enquanto carrega
+    renderSkeleton(4);
+  }
+
+  // ── LOOKS: cache primeiro
+  var lookCache = cacheGet(CACHE_KEY_LOOK);
+  if (lookCache) {
+    STATE.looks = lookCache;
+    renderLooks();
+  }
+
+  // ── FETCH em background (atualiza cache e UI se mudou)
+  sb("config", { select: "chave,valor" })
+    .then(function(cfgs) {
+      if (!cfgs) return;
+      var m = {};
+      cfgs.forEach(function(c) { m[c.chave] = c.valor || ""; });
+      cacheSet(CACHE_KEY_CFG, m);
+      STATE.cfg = m;
+      STATE.siteUrl = m.site_url || "https://infinitylabs83.github.io/skadi";
+      aplicarConfig(m);
+    }).catch(function(e) { console.error("config:", e); });
+
   sb("produtos", {
     filtros: "ativo=eq.true&order=ordem.asc,id.asc",
     select:  "id,nome,descricao,preco,preco_promo,foto,categoria,badge_escassez,ordem"
   }).then(function(ps) {
     STATE.produtos = ps || [];
+    cacheSet(CACHE_KEY_PROD, STATE.produtos);
     renderFiltros();
     renderLoja(STATE.produtos);
+    var lp = document.getElementById("loading-produtos");
+    if (lp) lp.style.display = "none";
   }).catch(function(e) {
-    var el = document.getElementById("loading-produtos");
-    if (el) el.innerHTML = "⚠️ Erro ao carregar produtos.";
+    if (!prodCache) {
+      var lp = document.getElementById("loading-produtos");
+      if (lp) lp.innerHTML = "<p style='text-align:center;color:var(--cinza);padding:40px;'>⚠️ Erro ao carregar produtos. Verifique sua conexão.</p>";
+    }
     console.error(e);
   });
 
-  sb("looks", { filtros: "ativo=eq.true&order=id.asc" }).then(function(ls) {
-    if (!ls || !ls.length) {
-      var g = document.getElementById("looks-grid");
-      if (g) g.innerHTML = "<p style='text-align:center;color:var(--cinza);grid-column:1/-1;padding:40px;'>Em breve novos looks disponíveis.</p>";
-      return;
-    }
-    var ids = ls.map(function(l) { return l.id; });
-    sb("look_produtos", {
-      filtros: "look_id=in.(" + ids.join(",") + ")",
-      select:  "look_id,produto_id"
-    }).then(function(rels) {
-      STATE.looks = ls.map(function(l) {
-        var pids = (rels || []).filter(function(r) { return r.look_id === l.id; }).map(function(r) { return r.produto_id; });
-        l.produto_ids = pids;
-        return l;
+  sb("looks", { filtros: "ativo=eq.true&order=id.asc" })
+    .then(function(ls) {
+      if (!ls || !ls.length) {
+        cacheSet(CACHE_KEY_LOOK, []);
+        var g = document.getElementById("looks-grid");
+        if (g) g.innerHTML = "<p style='text-align:center;color:var(--cinza);grid-column:1/-1;padding:40px;'>Em breve novos looks disponíveis.</p>";
+        return;
+      }
+      var ids = ls.map(function(l) { return l.id; });
+      sb("look_produtos", {
+        filtros: "look_id=in.(" + ids.join(",") + ")",
+        select:  "look_id,produto_id"
+      }).then(function(rels) {
+        STATE.looks = ls.map(function(l) {
+          var pids = (rels || []).filter(function(r) { return r.look_id === l.id; }).map(function(r) { return r.produto_id; });
+          l.produto_ids = pids;
+          return l;
+        });
+        cacheSet(CACHE_KEY_LOOK, STATE.looks);
+        renderLooks();
       });
-      renderLooks();
-    });
-  }).catch(function(e) { console.error("looks:", e); });
-
-  sb("config", { select: "chave,valor" }).then(function(cfgs) {
-    if (!cfgs) return;
-    var m = {};
-    cfgs.forEach(function(c) { m[c.chave] = c.valor || ""; });
-    STATE.cfg = m;
-    STATE.siteUrl = m.site_url || "https://infinitylabs83.github.io/skadi";
-    aplicarConfig(m);
-  }).catch(function(e) { console.error("config:", e); });
+    }).catch(function(e) { console.error("looks:", e); });
 }
 
 // ============================================================
@@ -909,8 +1007,27 @@ function aplicarConfig(m) {
 
   var vid = document.getElementById("hero-video");
   if (vid) {
-    if (m.video_url) { vid.src = m.video_url; vid.style.display = "block"; }
-    else vid.style.display = "none";
+    if (m.video_url) {
+      vid.src = m.video_url;
+      vid.style.display = "block";
+      vid.load();
+      // Forçar autoplay no iOS — precisa ser chamado dentro de evento de carregamento
+      var tryPlay = function() {
+        var p = vid.play();
+        if (p !== undefined) {
+          p.catch(function() {
+            // iOS bloqueou — tentar novamente com interação do usuário
+            vid.muted = true;
+            vid.play().catch(function() {});
+          });
+        }
+      };
+      vid.addEventListener("canplay", tryPlay, { once: true });
+      tryPlay();
+    } else {
+      vid.style.display = "none";
+      vid.src = "";
+    }
   }
   // Imagens de layout
   aplicarImgsLayout(m);
@@ -1123,7 +1240,9 @@ function salvarProduto() {
     : sb("produtos", { method:"POST",  prefer:"return=representation", body:dados });
   p.then(function() {
     toast(id ? "✓ Produto atualizado!" : "✓ Produto cadastrado!");
-    limparForm(); carregarAdmin();
+    // Limpar cache para forçar reload fresco
+    try { localStorage.removeItem(CACHE_KEY_PROD); } catch(e) {}
+    limparForm(); carregarAdmin(); carregarTudo();
   }).catch(function(e) { toast("Erro: " + e.message, "erro"); })
     .finally(function() { setBtn("btn-salvar-prod", false); });
 }
@@ -1365,7 +1484,7 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("btn-salvar-config").addEventListener("click", function() {
     setBtn("btn-salvar-config", true);
     salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video"])
-      .then(function() { toast("✓ Configurações salvas!"); carregarTudo(); })
+      .then(function() { toast("✓ Configurações salvas!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
       .catch(function(e) { toast("Erro: " + e.message, "erro"); })
       .finally(function() { setBtn("btn-salvar-config", false); });
   });
@@ -1376,7 +1495,7 @@ document.addEventListener("DOMContentLoaded", function() {
     salvarConfigs(["cfg-hero-titulo","cfg-hero-sub","cfg-sobre-titulo","cfg-sobre-texto1","cfg-sobre-texto2",
       "cfg-benef1-titulo","cfg-benef1-texto","cfg-benef2-titulo","cfg-benef2-texto",
       "cfg-benef3-titulo","cfg-benef3-texto","cfg-benef4-titulo","cfg-benef4-texto"])
-      .then(function() { toast("✓ Textos salvos!"); carregarTudo(); })
+      .then(function() { toast("✓ Textos salvos!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
       .catch(function(e) { toast("Erro: " + e.message, "erro"); })
       .finally(function() { setBtn("btn-salvar-textos", false); });
   });
@@ -1499,7 +1618,20 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(function() {
           STATE.cfg.video_url = url;
           var vid = document.getElementById("hero-video");
-          if (vid) { if (url) { vid.src = url; vid.style.display = "block"; } else { vid.style.display = "none"; } }
+          if (vid) {
+            if (url) {
+              vid.src = url;
+              vid.style.display = "block";
+              vid.muted = true;
+              vid.load();
+              vid.addEventListener("canplay", function() {
+                vid.play().catch(function() {});
+              }, { once: true });
+            } else {
+              vid.style.display = "none";
+              vid.src = "";
+            }
+          }
           toast(url ? "✓ Vídeo hero salvo!" : "✓ Vídeo removido.");
         })
         .catch(function(e) { toast("Erro: " + e.message, "erro"); })
