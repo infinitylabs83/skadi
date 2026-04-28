@@ -1527,16 +1527,17 @@ function aplicarConfig(m) {
 
   var vid = document.getElementById("hero-video");
   if (vid) {
-    if (m.video_url) {
-      vid.src = m.video_url;
+    var videoUrl = m.video_url || "";
+    if (videoUrl && videoUrl.trim() !== "") {
+      if (vid.src !== videoUrl) {
+        vid.src = videoUrl;
+        vid.load();
+      }
       vid.style.display = "block";
-      vid.load();
-      // Forçar autoplay no iOS — precisa ser chamado dentro de evento de carregamento
       var tryPlay = function() {
-        var p = vid.play();
-        if (p !== undefined) {
-          p.catch(function() {
-            // iOS bloqueou — tentar novamente com interação do usuário
+        var pr = vid.play();
+        if (pr !== undefined) {
+          pr.catch(function() {
             vid.muted = true;
             vid.play().catch(function() {});
           });
@@ -1545,8 +1546,10 @@ function aplicarConfig(m) {
       vid.addEventListener("canplay", tryPlay, { once: true });
       tryPlay();
     } else {
-      vid.style.display = "none";
-      vid.src = "";
+      // Sem URL de vídeo — esconder mas não apagar src se já tinha
+      if (!vid.src || vid.src === window.location.href) {
+        vid.style.display = "none";
+      }
     }
   }
   // Imagens de layout
@@ -2068,18 +2071,25 @@ function atualizarImgLayout(chave, url) {
 
 // ── Aplicar imagens de layout vindas do banco
 function aplicarImgsLayout(m) {
-  if (m.img_hero) {
-    document.querySelectorAll(".hero-img-layout").forEach(function(img) { img.src = m.img_hero; });
-  }
-  if (m.img_sobre) {
-    document.querySelectorAll(".sobre-img-layout").forEach(function(img) { img.src = m.img_sobre; });
-  }
-  // Preencher previews no admin
-  var ph = document.getElementById("prev-img-hero");
-  var ps = document.getElementById("prev-img-sobre");
-  if (ph && m.img_hero) { ph.src = m.img_hero; ph.style.display = "block"; document.getElementById("cfg-img-hero").value = m.img_hero; }
-  if (ps && m.img_sobre) { ps.src = m.img_sobre; ps.style.display = "block"; document.getElementById("cfg-img-sobre").value = m.img_sobre; }
-  if (document.getElementById("cfg-video") && m.video_url) document.getElementById("cfg-video").value = m.video_url;
+  try {
+    if (m.img_hero) {
+      document.querySelectorAll(".hero-img-layout").forEach(function(img) { img.src = m.img_hero; });
+    }
+    if (m.img_sobre) {
+      document.querySelectorAll(".sobre-img-layout").forEach(function(img) { img.src = m.img_sobre; });
+    }
+    // Preencher previews no admin (só se estiver aberto)
+    var ph = document.getElementById("prev-img-hero");
+    var ps = document.getElementById("prev-img-sobre");
+    var cfgHeroEl = document.getElementById("cfg-img-hero");
+    var cfgSobreEl = document.getElementById("cfg-img-sobre");
+    var cfgVideoEl = document.getElementById("cfg-video");
+    if (ph && m.img_hero) { ph.src = m.img_hero; ph.style.display = "block"; }
+    if (cfgHeroEl && m.img_hero) cfgHeroEl.value = m.img_hero;
+    if (ps && m.img_sobre) { ps.src = m.img_sobre; ps.style.display = "block"; }
+    if (cfgSobreEl && m.img_sobre) cfgSobreEl.value = m.img_sobre;
+    if (cfgVideoEl && m.video_url) cfgVideoEl.value = m.video_url;
+  } catch(e) { console.warn("aplicarImgsLayout:", e); }
 }
 
 // ============================================================
@@ -2205,18 +2215,22 @@ document.addEventListener("DOMContentLoaded", function() {
       window.open(wppLink(msgPresente(p)), "_blank");
     });
     // Foto principal abre lightbox
-    document.getElementById("modal-prod-main-img").addEventListener("click", function() {
-      if (!this.src) return;
-      document.getElementById("lightbox-img").src = this.src;
-      lb.classList.add("ativo");
-    });
+    var mpMainImg = document.getElementById("modal-prod-main-img");
+    if (mpMainImg) {
+      mpMainImg.addEventListener("click", function() {
+        if (!this.src) return;
+        var lbImg = document.getElementById("lightbox-img");
+        if (lbImg) lbImg.src = this.src;
+        if (lb) lb.classList.add("ativo");
+      });
+    }
   }
 
   // ── Modal Pix
   var mpix = document.getElementById("modal-pix");
   var pixClose = document.getElementById("pix-close");
   if (mpix) {
-    pixClose.addEventListener("click", fecharModalPix);
+    if (pixClose) pixClose.addEventListener("click", fecharModalPix);
     mpix.addEventListener("click", function(e) { if (e.target === mpix) fecharModalPix(); });
   }
 
