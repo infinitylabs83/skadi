@@ -215,6 +215,37 @@ footer{background:#111;}
 @keyframes spin{to{transform:rotate(360deg);}}
 @media(min-width:1024px){.lg-show{display:block !important;}}
 
+/* ── GALERIA DE FOTOS ── */
+.galeria-main{width:100%;padding-top:100%;position:relative;overflow:hidden;cursor:zoom-in;}
+.galeria-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 0.3s;}
+.galeria-thumbs{display:flex;gap:4px;padding:4px;overflow-x:auto;scrollbar-width:none;}
+.galeria-thumbs::-webkit-scrollbar{display:none;}
+.galeria-thumb{width:52px;height:52px;flex-shrink:0;cursor:pointer;border:2px solid transparent;overflow:hidden;transition:border-color 0.2s;}
+.galeria-thumb.ativa{border-color:var(--ouro);}
+.galeria-thumb img{width:100%;height:100%;object-fit:cover;}
+
+/* ── TAMANHOS ── */
+.tamanhos-wrap{margin-bottom:10px;}
+.tamanhos-label{font-size:clamp(0.62rem,1.8vw,0.68rem);letter-spacing:0.12em;text-transform:uppercase;color:var(--cinza);margin-bottom:5px;display:block;}
+.tamanhos-opcoes{display:flex;flex-wrap:wrap;gap:4px;}
+.tam-btn{min-width:32px;padding:4px 7px;border:1px solid var(--cinza-claro);background:white;font-size:clamp(0.7rem,1.8vw,0.75rem);font-family:'Jost',sans-serif;cursor:pointer;transition:all 0.2s;color:var(--preto);-webkit-tap-highlight-color:transparent;}
+.tam-btn:hover{border-color:var(--ouro);color:var(--ouro);}
+.tam-btn.sel{background:var(--ouro);color:white;border-color:var(--ouro);}
+
+/* ── QUANTIDADE ── */
+.qtd-wrap{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.qtd-label{font-size:clamp(0.62rem,1.8vw,0.68rem);letter-spacing:0.12em;text-transform:uppercase;color:var(--cinza);}
+.qtd-ctrl{display:flex;align-items:center;border:1px solid var(--cinza-claro);}
+.qtd-btn{width:30px;height:30px;border:none;background:white;font-size:1rem;cursor:pointer;color:var(--preto);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background 0.2s;}
+.qtd-btn:hover{background:var(--cinza-claro);}
+.qtd-num{width:32px;text-align:center;font-size:0.88rem;font-weight:500;border:none;border-left:1px solid var(--cinza-claro);border-right:1px solid var(--cinza-claro);height:30px;line-height:30px;}
+
+/* ── LIGHTBOX ── */
+#lightbox{display:none;position:fixed;inset:0;z-index:30000;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;}
+#lightbox.ativo{display:flex;}
+#lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;}
+#lightbox-close{position:absolute;top:20px;right:20px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;line-height:1;padding:8px;}
+
 /* ── SKELETON LOADING ── */
 .skeleton{background:linear-gradient(90deg,#e8e3da 25%,#f0ece4 50%,#e8e3da 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;}
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
@@ -485,6 +516,30 @@ footer{background:#111;}
         </div>
         <p style="font-size:0.78rem;color:var(--cinza);">💡 Você pode subir a foto diretamente <strong>ou</strong> colar um link de <a href="https://imgur.com" target="_blank" style="color:var(--ouro);">imgur.com</a> / <a href="https://postimages.org" target="_blank" style="color:var(--ouro);">postimages.org</a></p>
       </div>
+
+      <div style="margin-bottom:12px;">
+        <label class="admin-label">Fotos Extras (até 3 fotos adicionais)</label>
+        <div style="display:flex;flex-direction:column;gap:8px;" id="fotos-extra-wrap">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="url" id="p-foto2" class="admin-input" placeholder="Link da 2ª foto (opcional)"/>
+            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-foto2" accept="image/*" style="display:none;"/></label>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="url" id="p-foto3" class="admin-input" placeholder="Link da 3ª foto (opcional)"/>
+            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-foto3" accept="image/*" style="display:none;"/></label>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="url" id="p-foto4" class="admin-input" placeholder="Link da 4ª foto (opcional)"/>
+            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-foto4" accept="image/*" style="display:none;"/></label>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:18px;">
+        <label class="admin-label">Tamanhos disponíveis <span style="font-size:0.72rem;font-weight:400;text-transform:none;letter-spacing:0;">(opcional — separados por vírgula)</span></label>
+        <input type="text" id="p-tamanhos" class="admin-input" placeholder="Ex: 12,14,16,18,20,22,24  ou  P,M,G,GG  ou deixe vazio"/>
+        <p style="font-size:0.78rem;color:var(--cinza);margin-top:4px;">Use para anéis, pulseiras ou qualquer produto com variação de tamanho.</p>
+      </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button id="btn-salvar-prod" class="admin-btn" style="flex:1;">💾 Salvar Produto</button>
         <button id="btn-cancelar-edicao" class="admin-btn cinza" style="flex:1;display:none;">✕ Cancelar</button>
@@ -619,6 +674,12 @@ footer{background:#111;}
   </div>
 </div>
 
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lightbox-close">✕</button>
+  <img id="lightbox-img" src="" alt=""/>
+</div>
+
 <!-- MODAL SENHA -->
 <div id="modal-senha" class="modal-overlay">
   <div class="modal-box">
@@ -677,15 +738,17 @@ function wppLink(texto, wpp) {
   return "https://wa.me/" + wpp + "?text=" + encodeURIComponent(texto);
 }
 
-function msgProduto(p) {
-  var px   = (p.preco_promo && Number(p.preco_promo) > 0) ? fmt(p.preco_promo) : fmt(p.preco);
-  var url  = STATE.siteUrl ? STATE.siteUrl + "/#produto-" + p.id : "";
-  var txt  = "Olá! Me interessei neste produto da SKADI:\n\n"
+function msgProduto(p, tamanho, quantidade) {
+  var px  = (p.preco_promo && Number(p.preco_promo) > 0) ? fmt(p.preco_promo) : fmt(p.preco);
+  var url = STATE.siteUrl ? STATE.siteUrl + "/#produto-" + p.id : "";
+  var txt = "Olá! Quero comprar este produto da SKADI:\n\n"
            + "✦ " + p.nome + "\n"
            + p.descricao + "\n"
            + "Preço: " + px + "\n";
-  if (url) txt += "\nVeja aqui: " + url;
-  txt += "\n\nPode me passar mais informações?";
+  if (tamanho)    txt += "Tamanho: " + tamanho + "\n";
+  if (quantidade && quantidade > 1) txt += "Quantidade: " + quantidade + "\n";
+  if (url)        txt += "\nVeja aqui: " + url;
+  txt += "\n\nPode confirmar disponibilidade?";
   return txt;
 }
 
@@ -816,7 +879,7 @@ function carregarTudo() {
 
   sb("produtos", {
     filtros: "ativo=eq.true&order=ordem.asc,id.asc",
-    select:  "id,nome,descricao,preco,preco_promo,foto,categoria,badge_escassez,ordem"
+    select:  "id,nome,descricao,preco,preco_promo,foto,fotos_extra,categoria,badge_escassez,ordem,tamanhos"
   }).then(function(ps) {
     STATE.produtos = ps || [];
     cacheSet(CACHE_KEY_PROD, STATE.produtos);
@@ -1141,7 +1204,7 @@ function carregarAdmin() {
   document.getElementById("admin-lista").innerHTML = "<p style='color:var(--cinza);text-align:center;padding:20px;'>Carregando...</p>";
   sb("produtos", {
     filtros: "ativo=eq.true&order=ordem.asc,id.asc",
-    select:  "id,nome,descricao,preco,preco_promo,foto,categoria,badge_escassez,ordem"
+    select:  "id,nome,descricao,preco,preco_promo,foto,fotos_extra,categoria,badge_escassez,ordem,tamanhos"
   }).then(function(ps) {
     STATE.produtos = ps || [];
     renderAdmin(ps);
@@ -1234,7 +1297,12 @@ function salvarProduto() {
   var badge       = document.getElementById("p-badge").value.trim() || null;
   var ordem       = parseInt(document.getElementById("p-ordem").value) || 0;
   if (!nome || !descricao || isNaN(preco) || !foto) { toast("⚠️ Preencha todos os campos obrigatórios.", "erro"); setBtn("btn-salvar-prod", false); return; }
-  var dados = { nome:nome, descricao:descricao, preco:preco, preco_promo:preco_promo, foto:foto, categoria:categoria, badge_escassez:badge, ordem:ordem };
+  var foto2 = document.getElementById("p-foto2").value.trim();
+  var foto3 = document.getElementById("p-foto3").value.trim();
+  var foto4 = document.getElementById("p-foto4").value.trim();
+  var fotosExtras = [foto2, foto3, foto4].filter(Boolean).join("|") || null;
+  var tamanhos = document.getElementById("p-tamanhos").value.trim() || null;
+  var dados = { nome:nome, descricao:descricao, preco:preco, preco_promo:preco_promo, foto:foto, fotos_extra:fotosExtras, tamanhos:tamanhos, categoria:categoria, badge_escassez:badge, ordem:ordem };
   var p = id
     ? sb("produtos", { method:"PATCH", filtros:"id=eq."+id, prefer:"return=representation", body:dados })
     : sb("produtos", { method:"POST",  prefer:"return=representation", body:dados });
@@ -1259,6 +1327,11 @@ function editarProd(id) {
   document.getElementById("p-categoria").value    = p.categoria || "";
   document.getElementById("p-badge").value        = p.badge_escassez || "";
   document.getElementById("p-ordem").value        = p.ordem || 0;
+  document.getElementById("p-tamanhos").value     = p.tamanhos || "";
+  var extras = (p.fotos_extra || "").split("|");
+  document.getElementById("p-foto2").value = extras[0] || "";
+  document.getElementById("p-foto3").value = extras[1] || "";
+  document.getElementById("p-foto4").value = extras[2] || "";
   document.getElementById("form-titulo").textContent = "✏️ Editando: " + p.nome;
   document.getElementById("btn-cancelar-edicao").style.display = "";
   document.getElementById("form-titulo").scrollIntoView({ behavior:"smooth" });
@@ -1273,7 +1346,7 @@ function removerProd(id) {
 }
 
 function limparForm() {
-  ["edit-id","p-nome","p-desc","p-preco","p-preco-promo","p-foto","p-badge","p-ordem"].forEach(function(id) { document.getElementById(id).value = ""; });
+  ["edit-id","p-nome","p-desc","p-preco","p-preco-promo","p-foto","p-foto2","p-foto3","p-foto4","p-badge","p-ordem","p-tamanhos"].forEach(function(id) { document.getElementById(id).value = ""; });
   document.getElementById("p-categoria").value = "";
   document.getElementById("form-titulo").textContent = "➕ Cadastrar Novo Produto";
   document.getElementById("btn-cancelar-edicao").style.display = "none";
@@ -1500,6 +1573,15 @@ document.addEventListener("DOMContentLoaded", function() {
       .finally(function() { setBtn("btn-salvar-textos", false); });
   });
 
+  // Lightbox
+  var lb = document.getElementById("lightbox");
+  var lbClose = document.getElementById("lightbox-close");
+  if (lb) {
+    lbClose.addEventListener("click", function() { lb.classList.remove("ativo"); });
+    lb.addEventListener("click", function(e) { if (e.target === lb) lb.classList.remove("ativo"); });
+    document.addEventListener("keydown", function(e) { if (e.key === "Escape") lb.classList.remove("ativo"); });
+  }
+
   // Quiz
   iniciarQuiz();
   document.getElementById("quiz-next").addEventListener("click", quizAvancar);
@@ -1598,6 +1680,20 @@ document.addEventListener("DOMContentLoaded", function() {
         .finally(function() { setBtn("btn-salvar-img-sobre", false); });
     });
   }
+
+  // Upload fotos extras produto
+  ["up-foto2","up-foto3","up-foto4"].forEach(function(upId) {
+    var el = document.getElementById(upId);
+    if (!el) return;
+    el.addEventListener("change", function() {
+      var inputId = upId.replace("up-", "p-");
+      var inputEl = document.getElementById(inputId);
+      uploadArquivo(this.files[0], "produtos", function(url) {
+        if (inputEl) inputEl.value = url;
+        toast("✓ Foto carregada!");
+      });
+    });
+  });
 
   // Upload vídeo hero
   var upVideo = document.getElementById("up-video");
