@@ -246,6 +246,134 @@ footer{background:#111;}
 #lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;}
 #lightbox-close{position:absolute;top:20px;right:20px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;line-height:1;padding:8px;}
 
+/* ── MODAL PRODUTO ── */
+#modal-produto{
+  display:none;position:fixed;inset:0;z-index:25000;
+  background:rgba(0,0,0,0.6);
+  align-items:flex-end;justify-content:center;
+}
+#modal-produto.ativo{display:flex;}
+@media(min-width:640px){
+  #modal-produto{align-items:center;}
+}
+.modal-prod-box{
+  background:var(--bege);
+  width:100%;max-width:680px;
+  max-height:92svh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  border-radius:16px 16px 0 0;
+  position:relative;
+  animation:slideUp 0.35s cubic-bezier(0.25,0.8,0.25,1);
+}
+@media(min-width:640px){
+  .modal-prod-box{
+    border-radius:4px;
+    max-height:88svh;
+  }
+}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-prod-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 20px 0;position:sticky;top:0;
+  background:var(--bege);z-index:2;
+}
+.modal-prod-close{
+  background:none;border:none;color:var(--cinza);
+  font-size:1.6rem;cursor:pointer;padding:4px;line-height:1;
+  -webkit-tap-highlight-color:transparent;
+}
+.modal-prod-galeria{position:relative;}
+.modal-prod-main{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.modal-prod-thumbs{
+  display:flex;gap:6px;padding:8px 16px;
+  overflow-x:auto;scrollbar-width:none;
+}
+.modal-prod-thumbs::-webkit-scrollbar{display:none;}
+.modal-prod-thumb{
+  width:60px;height:60px;flex-shrink:0;cursor:pointer;
+  border:2px solid transparent;overflow:hidden;
+  transition:border-color 0.2s;border-radius:2px;
+}
+.modal-prod-thumb.ativa{border-color:var(--ouro);}
+.modal-prod-thumb img{width:100%;height:100%;object-fit:cover;}
+.modal-prod-corpo{padding:16px 20px 32px;}
+.modal-prod-cat{
+  font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--cinza);margin-bottom:6px;
+}
+.modal-prod-nome{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.2rem,4vw,1.6rem);
+  font-weight:500;color:var(--preto);
+  margin-bottom:8px;line-height:1.25;
+}
+.modal-prod-desc{
+  font-size:clamp(0.88rem,2.2vw,0.95rem);
+  color:var(--cinza);line-height:1.6;margin-bottom:16px;
+}
+.modal-prod-preco{margin-bottom:20px;}
+.modal-prod-preco .preco-normal{font-size:1.4rem;font-weight:500;color:var(--ouro);}
+.modal-prod-preco .preco-antigo{font-size:1rem;color:#aaa;text-decoration:line-through;margin-right:8px;}
+.modal-prod-preco .preco-promo{font-size:1.4rem;font-weight:500;color:#c0392b;}
+.modal-prod-divider{height:1px;background:var(--cinza-claro);margin:16px 0;}
+.modal-prod-label{
+  font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--cinza);margin-bottom:8px;display:flex;justify-content:space-between;
+}
+.modal-prod-tamanhos{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.modal-tam-btn{
+  min-width:40px;padding:8px 10px;
+  border:1px solid var(--cinza-claro);background:white;
+  font-size:0.85rem;font-family:'Jost',sans-serif;
+  cursor:pointer;transition:all 0.2s;color:var(--preto);
+  -webkit-tap-highlight-color:transparent;text-align:center;
+}
+.modal-tam-btn:hover{border-color:var(--ouro);color:var(--ouro);}
+.modal-tam-btn.sel{background:var(--ouro);color:white;border-color:var(--ouro);}
+.modal-qtd-wrap{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.modal-qtd-ctrl{display:flex;align-items:center;border:1px solid var(--cinza-claro);}
+.modal-qtd-btn{
+  width:40px;height:40px;border:none;background:white;
+  font-size:1.2rem;cursor:pointer;color:var(--preto);
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;transition:background 0.2s;
+}
+.modal-qtd-btn:hover{background:var(--cinza-claro);}
+.modal-qtd-num{
+  width:44px;text-align:center;font-size:1rem;font-weight:500;
+  border:none;border-left:1px solid var(--cinza-claro);
+  border-right:1px solid var(--cinza-claro);
+  height:40px;line-height:40px;
+}
+.modal-prod-btns{display:flex;flex-direction:column;gap:10px;}
+.modal-btn-comprar{
+  display:block;width:100%;text-align:center;
+  background:var(--ouro);color:white;border:none;
+  padding:16px;font-size:0.85rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;font-family:'Jost',sans-serif;
+  -webkit-tap-highlight-color:transparent;
+  transition:background 0.3s;text-decoration:none;
+}
+.modal-btn-comprar:hover{background:var(--ouro-esc);}
+.modal-btn-presente{
+  display:block;width:100%;text-align:center;
+  background:white;color:var(--ouro);
+  border:1px solid var(--ouro);
+  padding:14px;font-size:0.85rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;font-family:'Jost',sans-serif;
+  -webkit-tap-highlight-color:transparent;
+  transition:all 0.3s;
+}
+.modal-btn-presente:hover{background:var(--ouro);color:white;}
+/* Drag indicator mobile */
+.modal-drag-bar{
+  width:40px;height:4px;border-radius:2px;
+  background:var(--cinza-claro);margin:12px auto 0;
+}
+
 /* ── SKELETON LOADING ── */
 .skeleton{background:linear-gradient(90deg,#e8e3da 25%,#f0ece4 50%,#e8e3da 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;}
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
@@ -680,6 +808,52 @@ footer{background:#111;}
   <img id="lightbox-img" src="" alt=""/>
 </div>
 
+<!-- MODAL PRODUTO -->
+<div id="modal-produto">
+  <div class="modal-prod-box" id="modal-prod-box">
+    <div class="modal-drag-bar"></div>
+    <div class="modal-prod-header">
+      <span id="modal-prod-cat" class="modal-prod-cat"></span>
+      <button class="modal-prod-close" id="modal-prod-close">✕</button>
+    </div>
+    <!-- Galeria -->
+    <div class="modal-prod-galeria">
+      <img id="modal-prod-main-img" class="modal-prod-main" src="" alt=""/>
+      <div id="modal-prod-thumbs" class="modal-prod-thumbs"></div>
+    </div>
+    <!-- Corpo -->
+    <div class="modal-prod-corpo">
+      <h2 id="modal-prod-nome" class="modal-prod-nome"></h2>
+      <p  id="modal-prod-desc" class="modal-prod-desc"></p>
+      <div id="modal-prod-preco" class="modal-prod-preco"></div>
+      <div class="modal-prod-divider"></div>
+      <!-- Tamanhos -->
+      <div id="modal-tam-section" style="display:none;">
+        <div class="modal-prod-label">
+          <span>Tamanho</span>
+          <span id="modal-tam-sel-label" style="color:var(--ouro);font-weight:500;"></span>
+        </div>
+        <div id="modal-prod-tamanhos" class="modal-prod-tamanhos"></div>
+        <div class="modal-prod-divider"></div>
+      </div>
+      <!-- Quantidade -->
+      <div class="modal-qtd-wrap">
+        <span class="modal-prod-label" style="margin-bottom:0;">Quantidade</span>
+        <div class="modal-qtd-ctrl">
+          <button class="modal-qtd-btn" id="modal-qtd-menos">−</button>
+          <span class="modal-qtd-num" id="modal-qtd-num">1</span>
+          <button class="modal-qtd-btn" id="modal-qtd-mais">+</button>
+        </div>
+      </div>
+      <!-- Botões -->
+      <div class="modal-prod-btns">
+        <button class="modal-btn-comprar" id="modal-btn-comprar">Comprar via WhatsApp</button>
+        <button class="modal-btn-presente" id="modal-btn-presente">🎁 Comprar como Presente</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL SENHA -->
 <div id="modal-senha" class="modal-overlay">
   <div class="modal-box">
@@ -946,6 +1120,102 @@ function renderFiltros() {
 // ============================================================
 // RENDERIZAR LOJA
 // ============================================================
+// ── Estado do modal de produto
+var MODAL_PROD = { produto: null, quantidade: 1, tamanhoSel: "" };
+
+function abrirModalProduto(pid) {
+  var p = STATE.produtos.find(function(x){ return x.id === pid; });
+  if (!p) return;
+  MODAL_PROD.produto    = p;
+  MODAL_PROD.quantidade = 1;
+  MODAL_PROD.tamanhoSel = "";
+
+  // Foto principal
+  var mainImg = document.getElementById("modal-prod-main-img");
+  if (mainImg) { mainImg.src = p.foto || ""; mainImg.alt = p.nome; }
+
+  // Miniaturas
+  var thumbsEl = document.getElementById("modal-prod-thumbs");
+  var todasFotos = [p.foto];
+  if (p.fotos_extra) {
+    p.fotos_extra.split("|").forEach(function(u){ if(u.trim()) todasFotos.push(u.trim()); });
+  }
+  if (todasFotos.length > 1 && thumbsEl) {
+    thumbsEl.innerHTML = todasFotos.map(function(url, i) {
+      return "<div class='modal-prod-thumb" + (i===0?" ativa":"") + "' data-src='" + url + "'><img src='" + url + "' loading='lazy'/></div>";
+    }).join("");
+    thumbsEl.querySelectorAll(".modal-prod-thumb").forEach(function(t) {
+      t.addEventListener("click", function() {
+        if (mainImg) mainImg.src = this.getAttribute("data-src");
+        thumbsEl.querySelectorAll(".modal-prod-thumb").forEach(function(x){ x.classList.remove("ativa"); });
+        this.classList.add("ativa");
+      });
+    });
+    thumbsEl.style.display = "flex";
+  } else if (thumbsEl) {
+    thumbsEl.style.display = "none";
+    thumbsEl.innerHTML = "";
+  }
+
+  // Textos
+  var catEl = document.getElementById("modal-prod-cat");
+  if (catEl) catEl.textContent = p.categoria || "";
+  var nomeEl = document.getElementById("modal-prod-nome");
+  if (nomeEl) nomeEl.textContent = p.nome;
+  var descEl = document.getElementById("modal-prod-desc");
+  if (descEl) descEl.textContent = p.descricao;
+
+  // Preço
+  var precoEl = document.getElementById("modal-prod-preco");
+  var temP = p.preco_promo && Number(p.preco_promo) > 0;
+  if (precoEl) {
+    precoEl.innerHTML = temP
+      ? "<span class='preco-antigo'>" + fmt(p.preco) + "</span><span class='preco-promo'>" + fmt(p.preco_promo) + "</span>"
+      : "<span class='preco-normal'>" + fmt(p.preco) + "</span>";
+  }
+
+  // Tamanhos
+  var tamSection = document.getElementById("modal-tam-section");
+  var tamWrap    = document.getElementById("modal-prod-tamanhos");
+  var tamLabel   = document.getElementById("modal-tam-sel-label");
+  if (tamLabel) tamLabel.textContent = "";
+  if (p.tamanhos) {
+    var tams = p.tamanhos.split(",").map(function(t){ return t.trim(); }).filter(Boolean);
+    if (tams.length && tamWrap) {
+      tamWrap.innerHTML = tams.map(function(t) {
+        return "<button class='modal-tam-btn' data-tam='" + t + "'>" + t + "</button>";
+      }).join("");
+      tamWrap.querySelectorAll(".modal-tam-btn").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          tamWrap.querySelectorAll(".modal-tam-btn").forEach(function(b){ b.classList.remove("sel"); });
+          this.classList.add("sel");
+          MODAL_PROD.tamanhoSel = this.getAttribute("data-tam");
+          if (tamLabel) tamLabel.textContent = MODAL_PROD.tamanhoSel;
+        });
+      });
+      if (tamSection) tamSection.style.display = "block";
+    }
+  } else {
+    if (tamSection) tamSection.style.display = "none";
+    if (tamWrap) tamWrap.innerHTML = "";
+  }
+
+  // Quantidade reset
+  MODAL_PROD.quantidade = 1;
+  var qtdEl = document.getElementById("modal-qtd-num");
+  if (qtdEl) qtdEl.textContent = "1";
+
+  // Abrir modal
+  document.getElementById("modal-produto").classList.add("ativo");
+  document.body.style.overflow = "hidden";
+}
+
+function fecharModalProduto() {
+  document.getElementById("modal-produto").classList.remove("ativo");
+  document.body.style.overflow = "";
+  MODAL_PROD.produto = null;
+}
+
 function renderLoja(produtos) {
   var loading = document.getElementById("loading-produtos");
   var grid    = document.getElementById("produtos-grid");
@@ -963,34 +1233,32 @@ function renderLoja(produtos) {
       ? "<span class='preco-antigo'>" + fmt(p.preco) + "</span><span class='preco-promo'>" + fmt(p.preco_promo) + "</span>"
       : "<span class='preco-normal'>" + fmt(p.preco) + "</span>";
     var fotoH = p.foto
-      ? "<img src='" + p.foto + "' alt='" + p.nome.replace(/'/g,"") + "' loading='lazy'/>"
+      ? "<img src='" + p.foto + "' loading='lazy' alt='" + p.nome.replace(/'/g,"") + "'/>"
       : "<div class='img-ph'>✦</div>";
     var badges = "";
-    if (temP)            badges += "<div class='badge-promo'>Promoção</div>";
+    if (temP)             badges += "<div class='badge-promo'>Promoção</div>";
     if (p.badge_escassez) badges += "<div class='badge-escassez'>🔥 " + p.badge_escassez + "</div>";
     var catH = p.categoria ? "<div class='card-cat'>" + p.categoria + "</div>" : "";
-    h += "<div class='product-card' id='produto-" + p.id + "'>"
+
+    h += "<div class='product-card' id='produto-" + p.id + "' data-pid='" + p.id + "' style='cursor:pointer;'>"
        + "<div class='badge-wrap'>" + badges + "</div>"
        + "<div class='img-wrapper'>" + fotoH + "</div>"
        + "<div class='card-body'>" + catH
        + "<div class='card-nome'>" + p.nome + "</div>"
        + "<div class='card-desc'>" + p.descricao + "</div>"
        + "<div class='card-preco'>" + precoH + "</div>"
-       + "<div class='card-btns'>"
-       + "<a href='" + wppLink(msgProduto(p)) + "' target='_blank' class='btn-card'>Comprar via WhatsApp</a>"
-       + "<button class='btn-card-presente' data-pid='" + p.id + "' title='Comprar como presente'>🎁</button>"
-       + "</div>"
+       + "<div style='margin-top:10px;background:var(--ouro);color:white;text-align:center;padding:10px 12px;font-size:clamp(0.68rem,1.8vw,0.72rem);font-weight:500;letter-spacing:0.1em;text-transform:uppercase;'>Ver Detalhes ✦</div>"
        + "</div></div>";
   }
   grid.innerHTML = h;
-  grid.querySelectorAll(".btn-card-presente").forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      var pid = parseInt(this.getAttribute("data-pid"));
-      var prod = STATE.produtos.find(function(x) { return x.id === pid; });
-      if (prod) window.open(wppLink(msgPresente(prod)), "_blank");
+
+  grid.querySelectorAll(".product-card").forEach(function(card) {
+    card.addEventListener("click", function() {
+      abrirModalProduto(parseInt(this.getAttribute("data-pid")));
     });
   });
 }
+
 
 // ============================================================
 // RENDERIZAR LOOKS
@@ -1579,7 +1847,53 @@ document.addEventListener("DOMContentLoaded", function() {
   if (lb) {
     lbClose.addEventListener("click", function() { lb.classList.remove("ativo"); });
     lb.addEventListener("click", function(e) { if (e.target === lb) lb.classList.remove("ativo"); });
-    document.addEventListener("keydown", function(e) { if (e.key === "Escape") lb.classList.remove("ativo"); });
+  }
+
+  // Modal Produto
+  var mp = document.getElementById("modal-produto");
+  var mpClose = document.getElementById("modal-prod-close");
+  if (mp) {
+    // Fechar pelo X
+    if (mpClose) mpClose.addEventListener("click", fecharModalProduto);
+    // Fechar clicando no fundo
+    mp.addEventListener("click", function(e) { if (e.target === mp) fecharModalProduto(); });
+    // Fechar pelo Escape
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        fecharModalProduto();
+        if (lb) lb.classList.remove("ativo");
+      }
+    });
+    // Botão menos quantidade
+    document.getElementById("modal-qtd-menos").addEventListener("click", function() {
+      var el = document.getElementById("modal-qtd-num");
+      var v = parseInt(el.textContent) || 1;
+      if (v > 1) { v--; el.textContent = v; MODAL_PROD.quantidade = v; }
+    });
+    // Botão mais quantidade
+    document.getElementById("modal-qtd-mais").addEventListener("click", function() {
+      var el = document.getElementById("modal-qtd-num");
+      var v = parseInt(el.textContent) || 1;
+      if (v < 10) { v++; el.textContent = v; MODAL_PROD.quantidade = v; }
+    });
+    // Botão comprar
+    document.getElementById("modal-btn-comprar").addEventListener("click", function() {
+      var p = MODAL_PROD.produto;
+      if (!p) return;
+      window.open(wppLink(msgProduto(p, MODAL_PROD.tamanhoSel, MODAL_PROD.quantidade)), "_blank");
+    });
+    // Botão presente
+    document.getElementById("modal-btn-presente").addEventListener("click", function() {
+      var p = MODAL_PROD.produto;
+      if (!p) return;
+      window.open(wppLink(msgPresente(p)), "_blank");
+    });
+    // Foto principal abre lightbox
+    document.getElementById("modal-prod-main-img").addEventListener("click", function() {
+      if (!this.src) return;
+      document.getElementById("lightbox-img").src = this.src;
+      lb.classList.add("ativo");
+    });
   }
 
   // Quiz
