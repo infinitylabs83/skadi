@@ -374,93 +374,6 @@ footer{background:#111;}
   background:var(--cinza-claro);margin:12px auto 0;
 }
 
-/* ── MODAL PIX ── */
-#modal-pix{
-  display:none;position:fixed;inset:0;z-index:26000;
-  background:rgba(0,0,0,0.7);
-  align-items:flex-end;justify-content:center;
-}
-#modal-pix.ativo{display:flex;}
-@media(min-width:640px){#modal-pix{align-items:center;}}
-.pix-box{
-  background:white;width:100%;max-width:460px;
-  border-radius:16px 16px 0 0;
-  overflow-y:auto;max-height:92svh;
-  animation:slideUp 0.35s cubic-bezier(0.25,0.8,0.25,1);
-  position:relative;
-}
-@media(min-width:640px){.pix-box{border-radius:8px;max-height:88svh;}}
-.pix-header{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:16px 20px;border-bottom:1px solid var(--cinza-claro);
-  position:sticky;top:0;background:white;z-index:2;
-}
-.pix-titulo{
-  font-family:'Playfair Display',serif;
-  font-size:1.1rem;font-weight:500;color:var(--preto);
-}
-.pix-close{
-  background:none;border:none;color:var(--cinza);
-  font-size:1.5rem;cursor:pointer;padding:4px;
-  line-height:1;-webkit-tap-highlight-color:transparent;
-}
-.pix-corpo{padding:24px 20px 32px;}
-.pix-produto-resumo{
-  background:var(--bege);border:1px solid var(--cinza-claro);
-  padding:14px 16px;margin-bottom:20px;border-radius:4px;
-}
-.pix-prod-nome{font-weight:500;font-size:0.95rem;color:var(--preto);margin-bottom:4px;}
-.pix-prod-detalhe{font-size:0.82rem;color:var(--cinza);}
-.pix-valor{
-  text-align:center;margin-bottom:20px;
-  padding:16px;background:var(--bege);border-radius:4px;
-}
-.pix-valor-label{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--cinza);margin-bottom:4px;}
-.pix-valor-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--ouro);font-weight:500;}
-.pix-qr{
-  text-align:center;margin-bottom:20px;
-}
-.pix-qr img{width:180px;height:180px;border:1px solid var(--cinza-claro);padding:8px;}
-.pix-chave-wrap{
-  background:#f5f5f5;border:1px solid #ddd;border-radius:4px;
-  padding:12px 14px;margin-bottom:20px;display:flex;
-  align-items:center;justify-content:space-between;gap:8px;
-}
-.pix-chave-label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cinza);margin-bottom:2px;}
-.pix-chave-valor{font-size:0.9rem;font-weight:500;color:var(--preto);word-break:break-all;}
-.pix-copiar{
-  background:var(--ouro);color:white;border:none;
-  padding:8px 14px;font-size:0.75rem;font-weight:500;
-  letter-spacing:0.08em;text-transform:uppercase;
-  cursor:pointer;white-space:nowrap;border-radius:2px;
-  font-family:'Jost',sans-serif;flex-shrink:0;
-  transition:background 0.2s;-webkit-tap-highlight-color:transparent;
-}
-.pix-copiar:hover{background:var(--ouro-esc);}
-.pix-instrucao{
-  background:#FFF8E6;border:1px solid #F0D060;
-  border-radius:4px;padding:14px 16px;margin-bottom:20px;
-  font-size:0.85rem;line-height:1.6;color:#7a5c00;
-}
-.pix-instrucao strong{display:block;margin-bottom:4px;font-size:0.88rem;}
-.pix-instrucao ol{margin:8px 0 0 16px;padding:0;}
-.pix-instrucao li{margin-bottom:4px;}
-.pix-btn-comprovante{
-  display:block;width:100%;text-align:center;
-  background:#25D366;color:white;border:none;
-  padding:16px;font-size:0.85rem;font-weight:500;
-  letter-spacing:0.1em;text-transform:uppercase;
-  cursor:pointer;font-family:'Jost',sans-serif;
-  border-radius:2px;transition:background 0.3s;
-  -webkit-tap-highlight-color:transparent;
-  text-decoration:none;
-}
-.pix-btn-comprovante:hover{background:#1ea952;}
-.pix-aviso-final{
-  text-align:center;font-size:0.78rem;color:var(--cinza);
-  margin-top:12px;line-height:1.5;
-}
-
 /* ── SKELETON LOADING ── */
 .skeleton{background:linear-gradient(90deg,#e8e3da 25%,#f0ece4 50%,#e8e3da 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;}
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
@@ -750,10 +663,10 @@ footer{background:#111;}
         </div>
       </div>
 
-      <div id="tamanhos-field-wrap" style="margin-bottom:18px;display:none;">
-        <label class="admin-label">Tamanhos disponíveis <span style="font-size:0.72rem;font-weight:400;text-transform:none;letter-spacing:0;">(separados por vírgula)</span></label>
-        <input type="text" id="p-tamanhos" class="admin-input" placeholder="Ex: 12,14,16,18,20,22,24  ou  P,M,G,GG"/>
-        <p style="font-size:0.78rem;color:var(--cinza);margin-top:4px;">Campo disponível para Anéis, Pulseiras e Tornozeleiras.</p>
+      <div style="margin-bottom:18px;">
+        <label class="admin-label">Tamanhos disponíveis <span style="font-size:0.72rem;font-weight:400;text-transform:none;letter-spacing:0;">(opcional — separados por vírgula)</span></label>
+        <input type="text" id="p-tamanhos" class="admin-input" placeholder="Ex: 12,14,16,18,20,22,24  ou  P,M,G,GG  ou deixe vazio"/>
+        <p style="font-size:0.78rem;color:var(--cinza);margin-top:4px;">Use para anéis, pulseiras ou qualquer produto com variação de tamanho.</p>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button id="btn-salvar-prod" class="admin-btn" style="flex:1;">💾 Salvar Produto</button>
@@ -784,38 +697,6 @@ footer{background:#111;}
       </div>
       <div style="margin-bottom:12px;"><label class="admin-label">Banner do topo (vazio = ocultar)</label><input type="text" id="cfg-banner" class="admin-input" placeholder="Ex: 🎁 Frete grátis acima de R$ 200!"/></div>
       <div style="margin-bottom:18px;"><label class="admin-label">Barra de Garantia</label><input type="text" id="cfg-garantia" class="admin-input" placeholder="🔄 Troca em 7 dias • 🎁 Embalagem para presente • 🚚 Frete grátis acima de R$ 200"/></div>
-
-      <div style="background:var(--bege);border:1px solid var(--cinza-claro);padding:16px;border-radius:2px;margin-bottom:18px;">
-        <p class="admin-label" style="margin-bottom:12px;">💚 Configurações do Pix</p>
-        <div class="admin-grid-2" style="margin-bottom:10px;">
-          <div>
-            <label class="admin-label">Tipo da Chave</label>
-            <select id="cfg-pix-tipo" class="admin-input">
-              <option value="CPF">CPF</option>
-              <option value="CNPJ">CNPJ</option>
-              <option value="Telefone">Telefone</option>
-              <option value="E-mail">E-mail</option>
-              <option value="Chave aleatória">Chave aleatória</option>
-            </select>
-          </div>
-          <div>
-            <label class="admin-label">Chave Pix *</label>
-            <input type="text" id="cfg-pix-chave" class="admin-input" placeholder="Ex: 85999998888 ou email@dominio.com"/>
-          </div>
-        </div>
-        <div style="margin-bottom:10px;">
-          <label class="admin-label">Nome do Favorecido (aparece no QR)</label>
-          <input type="text" id="cfg-pix-nome" class="admin-input" placeholder="Ex: SKADI SEMI JOIAS"/>
-        </div>
-        <div>
-          <label class="admin-label">URL do QR Code Pix (imagem) <span style="font-size:0.72rem;font-weight:400;text-transform:none;letter-spacing:0;">— gere em <a href="https://gerarqrcode.com.br" target="_blank" style="color:var(--ouro);">gerarqrcode.com.br</a> e suba no Supabase Storage</span></label>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <input type="url" id="cfg-pix-qr" class="admin-input" placeholder="https://... link da imagem do QR Code"/>
-            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-pix-qr" accept="image/*" style="display:none;"/></label>
-          </div>
-        </div>
-      </div>
-
       <button id="btn-salvar-config" class="admin-btn" style="width:auto;margin-bottom:0;">💾 Salvar Configurações</button>
     </div>
 
@@ -967,74 +848,8 @@ footer{background:#111;}
       <!-- Botões -->
       <div class="modal-prod-btns">
         <button class="modal-btn-comprar" id="modal-btn-comprar">Comprar via WhatsApp</button>
-        <button class="modal-btn-pix" id="modal-btn-pix"
-          style="display:block;width:100%;text-align:center;background:#32a85a;color:white;border:none;padding:14px;font-size:0.85rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:background 0.3s;-webkit-tap-highlight-color:transparent;">
-          💚 Pagar via Pix
-        </button>
         <button class="modal-btn-presente" id="modal-btn-presente">🎁 Comprar como Presente</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL PIX -->
-<div id="modal-pix">
-  <div class="pix-box">
-    <div class="modal-drag-bar" style="background:var(--cinza-claro);width:40px;height:4px;border-radius:2px;margin:12px auto 0;"></div>
-    <div class="pix-header">
-      <span class="pix-titulo">💚 Pagar via Pix</span>
-      <button class="pix-close" id="pix-close">✕</button>
-    </div>
-    <div class="pix-corpo">
-      <!-- Resumo do produto -->
-      <div class="pix-produto-resumo">
-        <div class="pix-prod-nome" id="pix-prod-nome"></div>
-        <div class="pix-prod-detalhe" id="pix-prod-detalhe"></div>
-      </div>
-
-      <!-- Valor -->
-      <div class="pix-valor">
-        <div class="pix-valor-label">Valor a pagar</div>
-        <div class="pix-valor-num" id="pix-valor-num">R$ 0,00</div>
-      </div>
-
-      <!-- QR Code -->
-      <div class="pix-qr">
-        <img id="pix-qr-img" src="" alt="QR Code Pix"/>
-        <p style="font-size:0.78rem;color:var(--cinza);margin-top:8px;">Abra o app do seu banco e escaneie o QR Code</p>
-      </div>
-
-      <!-- Chave Pix -->
-      <div>
-        <div style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--cinza);margin-bottom:8px;">Ou copie a chave Pix</div>
-        <div class="pix-chave-wrap">
-          <div>
-            <div class="pix-chave-label" id="pix-tipo-label">Chave Pix</div>
-            <div class="pix-chave-valor" id="pix-chave-valor"></div>
-          </div>
-          <button class="pix-copiar" id="pix-copiar-btn">Copiar</button>
-        </div>
-      </div>
-
-      <!-- Instruções -->
-      <div class="pix-instrucao">
-        <strong>📋 Como pagar:</strong>
-        <ol>
-          <li>Abra o app do seu banco ou carteira digital</li>
-          <li>Escaneie o QR Code <strong>ou</strong> cole a chave Pix acima</li>
-          <li>Confirme o valor e finalize o pagamento</li>
-          <li>Clique no botão verde abaixo para nos enviar o comprovante</li>
-        </ol>
-      </div>
-
-      <!-- Botão WhatsApp comprovante -->
-      <a class="pix-btn-comprovante" id="pix-btn-comprovante" href="#" target="_blank">
-        📲 Enviar Comprovante via WhatsApp
-      </a>
-      <p class="pix-aviso-final">
-        Após confirmarmos o pagamento, entraremos em contato<br/>
-        para confirmar os dados de entrega. 📦
-      </p>
     </div>
   </div>
 </div>
@@ -1364,11 +1179,7 @@ function abrirModalProduto(pid) {
   var tamWrap    = document.getElementById("modal-prod-tamanhos");
   var tamLabel   = document.getElementById("modal-tam-sel-label");
   if (tamLabel) tamLabel.textContent = "";
-  // Categorias que usam tamanho
-  var catComTamanho = ["Anéis", "Pulseiras", "Tornozeleiras"];
-  var usaTamanho = p.tamanhos && catComTamanho.indexOf(p.categoria) !== -1;
-
-  if (usaTamanho) {
+  if (p.tamanhos) {
     var tams = p.tamanhos.split(",").map(function(t){ return t.trim(); }).filter(Boolean);
     if (tams.length && tamWrap) {
       tamWrap.innerHTML = tams.map(function(t) {
@@ -1527,17 +1338,16 @@ function aplicarConfig(m) {
 
   var vid = document.getElementById("hero-video");
   if (vid) {
-    var videoUrl = m.video_url || "";
-    if (videoUrl && videoUrl.trim() !== "") {
-      if (vid.src !== videoUrl) {
-        vid.src = videoUrl;
-        vid.load();
-      }
+    if (m.video_url) {
+      vid.src = m.video_url;
       vid.style.display = "block";
+      vid.load();
+      // Forçar autoplay no iOS — precisa ser chamado dentro de evento de carregamento
       var tryPlay = function() {
-        var pr = vid.play();
-        if (pr !== undefined) {
-          pr.catch(function() {
+        var p = vid.play();
+        if (p !== undefined) {
+          p.catch(function() {
+            // iOS bloqueou — tentar novamente com interação do usuário
             vid.muted = true;
             vid.play().catch(function() {});
           });
@@ -1546,10 +1356,8 @@ function aplicarConfig(m) {
       vid.addEventListener("canplay", tryPlay, { once: true });
       tryPlay();
     } else {
-      // Sem URL de vídeo — esconder mas não apagar src se já tinha
-      if (!vid.src || vid.src === window.location.href) {
-        vid.style.display = "none";
-      }
+      vid.style.display = "none";
+      vid.src = "";
     }
   }
   // Imagens de layout
@@ -1792,12 +1600,8 @@ function editarProd(id) {
   document.getElementById("p-foto2").value = extras[0] || "";
   document.getElementById("p-foto3").value = extras[1] || "";
   document.getElementById("p-foto4").value = extras[2] || "";
-  document.getEle  document.getElementById("form-titulo").textContent = "✏️ Editando: " + p.nome;
+  document.getElementById("form-titulo").textContent = "✏️ Editando: " + p.nome;
   document.getElementById("btn-cancelar-edicao").style.display = "";
-  // Mostrar campo tamanhos apenas para Anéis, Pulseiras e Tornozeleiras
-  var catsCom = ["Anéis", "Pulseiras", "Tornozeleiras"];
-  var tamFieldEl = document.getElementById("tamanhos-field-wrap");
-  if (tamFieldEl) tamFieldEl.style.display = (catsCom.indexOf(p.categoria) !== -1) ? "block" : "none";
   document.getElementById("form-titulo").scrollIntoView({ behavior:"smooth" });
 }
 
@@ -1814,9 +1618,6 @@ function limparForm() {
   document.getElementById("p-categoria").value = "";
   document.getElementById("form-titulo").textContent = "➕ Cadastrar Novo Produto";
   document.getElementById("btn-cancelar-edicao").style.display = "none";
-  // Ocultar campo tamanhos ao limpar
-  var tamWrap = document.getElementById("tamanhos-field-wrap");
-  if (tamWrap) tamWrap.style.display = "none";
 }
 
 function salvarLook() {
@@ -1854,10 +1655,6 @@ function popularFormConfig(m) {
     "cfg-video":       "video_url",
     "cfg-img-hero":    "img_hero",
     "cfg-img-sobre":   "img_sobre",
-    "cfg-pix-chave":   "pix_chave",
-    "cfg-pix-tipo":    "pix_tipo",
-    "cfg-pix-nome":    "pix_nome",
-    "cfg-pix-qr":      "pix_qr",
     "cfg-hero-titulo": "hero_titulo",
     "cfg-hero-sub":    "hero_sub",
     "cfg-sobre-titulo":"sobre_titulo",
@@ -1883,10 +1680,6 @@ function salvarConfigs(ids) {
     "cfg-video":       "video_url",
     "cfg-img-hero":    "img_hero",
     "cfg-img-sobre":   "img_sobre",
-    "cfg-pix-chave":   "pix_chave",
-    "cfg-pix-tipo":    "pix_tipo",
-    "cfg-pix-nome":    "pix_nome",
-    "cfg-pix-qr":      "pix_qr",
     "cfg-hero-titulo": "hero_titulo",
     "cfg-hero-sub":    "hero_sub",
     "cfg-sobre-titulo":"sobre_titulo",
@@ -1937,99 +1730,6 @@ function fecharAdmin() {
 }
 
 // ============================================================
-// PIX — ABRIR / FECHAR / MENSAGEM
-// ============================================================
-function abrirModalPix() {
-  var p   = MODAL_PROD.produto;
-  if (!p) return;
-  var cfg = STATE.cfg;
-
-  // Verificar se Pix está configurado
-  if (!cfg.pix_chave) {
-    toast("⚠️ Chave Pix não configurada. Configure no painel admin.", "erro");
-    return;
-  }
-
-  var temP  = p.preco_promo && Number(p.preco_promo) > 0;
-  var valor = temP ? Number(p.preco_promo) : Number(p.preco);
-  var qtd   = MODAL_PROD.quantidade || 1;
-  var total = valor * qtd;
-  var tam   = MODAL_PROD.tamanhoSel;
-
-  // Preencher resumo produto
-  var nomeEl = document.getElementById("pix-prod-nome");
-  if (nomeEl) nomeEl.textContent = p.nome;
-  var detEl = document.getElementById("pix-prod-detalhe");
-  var detalhe = "";
-  if (tam) detalhe += "Tamanho: " + tam + "  ";
-  if (qtd > 1) detalhe += "Quantidade: " + qtd;
-  if (detEl) detEl.textContent = detalhe || "1 unidade";
-
-  // Valor
-  var valorEl = document.getElementById("pix-valor-num");
-  if (valorEl) valorEl.textContent = fmt(total);
-
-  // QR Code
-  var qrImg = document.getElementById("pix-qr-img");
-  if (qrImg) {
-    if (cfg.pix_qr) {
-      qrImg.src = cfg.pix_qr;
-      qrImg.style.display = "block";
-    } else {
-      qrImg.style.display = "none";
-    }
-  }
-
-  // Chave Pix
-  var tipoEl  = document.getElementById("pix-tipo-label");
-  var chaveEl = document.getElementById("pix-chave-valor");
-  if (tipoEl)  tipoEl.textContent  = cfg.pix_tipo  || "Chave Pix";
-  if (chaveEl) chaveEl.textContent = cfg.pix_chave || "";
-
-  // Mensagem WhatsApp com comprovante + pedido de endereço
-  var wpp = cfg.whatsapp || "5521999999999";
-  var msg = "Olá! Acabei de realizar o pagamento via Pix. 💚
-
-"
-    + "🛍️ *Produto:* " + p.nome + "
-";
-  if (tam) msg += "📏 *Tamanho:* " + tam + "
-";
-  if (qtd > 1) msg += "🔢 *Quantidade:* " + qtd + "
-";
-  msg += "💰 *Valor pago:* " + fmt(total) + "
-
-"
-    + "📎 *Segue o comprovante em anexo.*
-
-"
-    + "Por favor, me informe o prazo de entrega e confirme o recebimento. "
-    + "Meu endereço de entrega é:
-
-"
-    + "📍 Rua / Número:
-"
-    + "🏘️ Bairro:
-"
-    + "🏙️ Cidade / Estado:
-"
-    + "📮 CEP:
-"
-    + "📱 Telefone para contato:";
-
-  var linkWppComprovante = "https://wa.me/" + wpp + "?text=" + encodeURIComponent(msg);
-  var btnComprovante = document.getElementById("pix-btn-comprovante");
-  if (btnComprovante) btnComprovante.href = linkWppComprovante;
-
-  // Abrir modal Pix (fechar produto se quiser, mas mantém aberto)
-  document.getElementById("modal-pix").classList.add("ativo");
-}
-
-function fecharModalPix() {
-  document.getElementById("modal-pix").classList.remove("ativo");
-}
-
-// ============================================================
 // UPLOAD PARA SUPABASE STORAGE
 // ============================================================
 function uploadArquivo(file, bucket, callback) {
@@ -2071,354 +1771,309 @@ function atualizarImgLayout(chave, url) {
 
 // ── Aplicar imagens de layout vindas do banco
 function aplicarImgsLayout(m) {
-  try {
-    if (m.img_hero) {
-      document.querySelectorAll(".hero-img-layout").forEach(function(img) { img.src = m.img_hero; });
-    }
-    if (m.img_sobre) {
-      document.querySelectorAll(".sobre-img-layout").forEach(function(img) { img.src = m.img_sobre; });
-    }
-    // Preencher previews no admin (só se estiver aberto)
-    var ph = document.getElementById("prev-img-hero");
-    var ps = document.getElementById("prev-img-sobre");
-    var cfgHeroEl = document.getElementById("cfg-img-hero");
-    var cfgSobreEl = document.getElementById("cfg-img-sobre");
-    var cfgVideoEl = document.getElementById("cfg-video");
-    if (ph && m.img_hero) { ph.src = m.img_hero; ph.style.display = "block"; }
-    if (cfgHeroEl && m.img_hero) cfgHeroEl.value = m.img_hero;
-    if (ps && m.img_sobre) { ps.src = m.img_sobre; ps.style.display = "block"; }
-    if (cfgSobreEl && m.img_sobre) cfgSobreEl.value = m.img_sobre;
-    if (cfgVideoEl && m.video_url) cfgVideoEl.value = m.video_url;
-  } catch(e) { console.warn("aplicarImgsLayout:", e); }
+  if (m.img_hero) {
+    document.querySelectorAll(".hero-img-layout").forEach(function(img) { img.src = m.img_hero; });
+  }
+  if (m.img_sobre) {
+    document.querySelectorAll(".sobre-img-layout").forEach(function(img) { img.src = m.img_sobre; });
+  }
+  // Preencher previews no admin
+  var ph = document.getElementById("prev-img-hero");
+  var ps = document.getElementById("prev-img-sobre");
+  if (ph && m.img_hero) { ph.src = m.img_hero; ph.style.display = "block"; document.getElementById("cfg-img-hero").value = m.img_hero; }
+  if (ps && m.img_sobre) { ps.src = m.img_sobre; ps.style.display = "block"; document.getElementById("cfg-img-sobre").value = m.img_sobre; }
+  if (document.getElementById("cfg-video") && m.video_url) document.getElementById("cfg-video").value = m.video_url;
 }
 
 // ============================================================
 // INIT
 // ============================================================
 document.addEventListener("DOMContentLoaded", function() {
-  // ── Inicializar dados
-  try { carregarTudo(); } catch(e) { console.error("carregarTudo:", e); }
+  carregarTudo();
 
-  // ── Navegação
-  try {
-    document.getElementById("hamburger").addEventListener("click", function() {
-      document.getElementById("mobile-menu").classList.toggle("open");
-    });
-    ["mob-link-inicio","mob-link-colecao","mob-link-looks","mob-link-sobre"].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.addEventListener("click", function() { document.getElementById("mobile-menu").classList.remove("open"); });
-    });
-  } catch(e) { console.error("nav:", e); }
+  // Nav
+  document.getElementById("hamburger").addEventListener("click", function() {
+    document.getElementById("mobile-menu").classList.toggle("open");
+  });
+  ["mob-link-inicio","mob-link-colecao","mob-link-looks","mob-link-sobre"].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener("click", function() { document.getElementById("mobile-menu").classList.remove("open"); });
+  });
 
-  // ── Botões Admin (isolados em try/catch próprio)
-  try {
-    document.getElementById("nav-admin-btn").addEventListener("click", abrirAdmin);
-    document.getElementById("desk-admin-btn").addEventListener("click", abrirAdmin);
-    document.getElementById("mob-admin-btn").addEventListener("click", function() {
-      document.getElementById("mobile-menu").classList.remove("open");
-      setTimeout(abrirAdmin, 100);
-    });
-    document.getElementById("fechar-admin-btn").addEventListener("click", fecharAdmin);
-  } catch(e) { console.error("admin-btns:", e); }
+  // Admin botões
+  document.getElementById("nav-admin-btn").addEventListener("click", abrirAdmin);
+  document.getElementById("desk-admin-btn").addEventListener("click", abrirAdmin);
+  document.getElementById("mob-admin-btn").addEventListener("click", function() {
+    document.getElementById("mobile-menu").classList.remove("open");
+    setTimeout(abrirAdmin, 100);
+  });
+  document.getElementById("fechar-admin-btn").addEventListener("click", fecharAdmin);
 
-  // ── Modal Senha
-  try {
-    document.getElementById("btn-entrar").addEventListener("click", verificarSenha);
-    document.getElementById("btn-cancelar-modal").addEventListener("click", fecharModal);
-    document.getElementById("input-senha").addEventListener("keydown", function(e) { if(e.key==="Enter") verificarSenha(); });
-  } catch(e) { console.error("modal-senha:", e); }
+  // Modal senha
+  document.getElementById("btn-entrar").addEventListener("click", verificarSenha);
+  document.getElementById("btn-cancelar-modal").addEventListener("click", fecharModal);
+  document.getElementById("input-senha").addEventListener("keydown", function(e) { if(e.key==="Enter") verificarSenha(); });
 
-  // ── Formulário Produto
-  try {
-    document.getElementById("btn-salvar-prod").addEventListener("click", salvarProduto);
-    document.getElementById("btn-cancelar-edicao").addEventListener("click", limparForm);
-  } catch(e) { console.error("form-prod:", e); }
+  // Produto
+  document.getElementById("btn-salvar-prod").addEventListener("click", salvarProduto);
+  document.getElementById("btn-cancelar-edicao").addEventListener("click", limparForm);
 
-  // ── Tamanhos — mostrar/ocultar por categoria
-  try {
-    var catSelect = document.getElementById("p-categoria");
-    var tamField  = document.getElementById("tamanhos-field-wrap");
-    function toggleTamanhoField() {
-      var cat = catSelect ? catSelect.value : "";
-      var cats = ["Anéis", "Pulseiras", "Tornozeleiras"];
-      if (tamField) tamField.style.display = (cats.indexOf(cat) !== -1) ? "block" : "none";
-    }
-    if (catSelect) catSelect.addEventListener("change", toggleTamanhoField);
-    toggleTamanhoField();
-  } catch(e) { console.error("tamanhos:", e); }
+  // Look
+  document.getElementById("btn-salvar-look").addEventListener("click", salvarLook);
 
-  // ── Look
-  try {
-    document.getElementById("btn-salvar-look").addEventListener("click", salvarLook);
-  } catch(e) { console.error("look:", e); }
+  // Config geral
+  document.getElementById("btn-salvar-config").addEventListener("click", function() {
+    setBtn("btn-salvar-config", true);
+    salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video"])
+      .then(function() { toast("✓ Configurações salvas!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
+      .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+      .finally(function() { setBtn("btn-salvar-config", false); });
+  });
 
-  // ── Configurações
-  try {
-    document.getElementById("btn-salvar-config").addEventListener("click", function() {
-      setBtn("btn-salvar-config", true);
-      salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video","cfg-pix-chave","cfg-pix-tipo","cfg-pix-nome","cfg-pix-qr"])
-        .then(function() { toast("✓ Configurações salvas!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
-        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-        .finally(function() { setBtn("btn-salvar-config", false); });
-    });
-  } catch(e) { console.error("config:", e); }
+  // Textos
+  document.getElementById("btn-salvar-textos").addEventListener("click", function() {
+    setBtn("btn-salvar-textos", true);
+    salvarConfigs(["cfg-hero-titulo","cfg-hero-sub","cfg-sobre-titulo","cfg-sobre-texto1","cfg-sobre-texto2",
+      "cfg-benef1-titulo","cfg-benef1-texto","cfg-benef2-titulo","cfg-benef2-texto",
+      "cfg-benef3-titulo","cfg-benef3-texto","cfg-benef4-titulo","cfg-benef4-texto"])
+      .then(function() { toast("✓ Textos salvos!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
+      .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+      .finally(function() { setBtn("btn-salvar-textos", false); });
+  });
 
-  // ── Textos
-  try {
-    document.getElementById("btn-salvar-textos").addEventListener("click", function() {
-      setBtn("btn-salvar-textos", true);
-      salvarConfigs(["cfg-hero-titulo","cfg-hero-sub","cfg-sobre-titulo","cfg-sobre-texto1","cfg-sobre-texto2",
-        "cfg-benef1-titulo","cfg-benef1-texto","cfg-benef2-titulo","cfg-benef2-texto",
-        "cfg-benef3-titulo","cfg-benef3-texto","cfg-benef4-titulo","cfg-benef4-texto"])
-        .then(function() { toast("✓ Textos salvos!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
-        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-        .finally(function() { setBtn("btn-salvar-textos", false); });
-    });
-  } catch(e) { console.error("textos:", e); }
+  // Lightbox
+  var lb = document.getElementById("lightbox");
+  var lbClose = document.getElementById("lightbox-close");
+  if (lb) {
+    lbClose.addEventListener("click", function() { lb.classList.remove("ativo"); });
+    lb.addEventListener("click", function(e) { if (e.target === lb) lb.classList.remove("ativo"); });
+  }
 
-  // ── Lightbox
-  try {
-    var lb = document.getElementById("lightbox");
-    var lbClose = document.getElementById("lightbox-close");
-    if (lb && lbClose) {
-      lbClose.addEventListener("click", function() { lb.classList.remove("ativo"); });
-      lb.addEventListener("click", function(e) { if (e.target === lb) lb.classList.remove("ativo"); });
-    }
-  } catch(e) { console.error("lightbox:", e); }
-
-  // ── Modal Produto
-  try {
-    var mp = document.getElementById("modal-produto");
-    var mpClose = document.getElementById("modal-prod-close");
-    if (mp) {
-      if (mpClose) mpClose.addEventListener("click", fecharModalProduto);
-      mp.addEventListener("click", function(e) { if (e.target === mp) fecharModalProduto(); });
-      document.addEventListener("keydown", function(e) {
-        if (e.key === "Escape") { fecharModalProduto(); fecharModalPix(); if (lb) lb.classList.remove("ativo"); }
-      });
-      document.getElementById("modal-qtd-menos").addEventListener("click", function() {
-        var el = document.getElementById("modal-qtd-num");
-        var v = parseInt(el.textContent) || 1;
-        if (v > 1) { v--; el.textContent = v; MODAL_PROD.quantidade = v; }
-      });
-      document.getElementById("modal-qtd-mais").addEventListener("click", function() {
-        var el = document.getElementById("modal-qtd-num");
-        var v = parseInt(el.textContent) || 1;
-        if (v < 10) { v++; el.textContent = v; MODAL_PROD.quantidade = v; }
-      });
-      document.getElementById("modal-btn-comprar").addEventListener("click", function() {
-        var p = MODAL_PROD.produto; if (!p) return;
-        window.open(wppLink(msgProduto(p, MODAL_PROD.tamanhoSel, MODAL_PROD.quantidade)), "_blank");
-      });
-      document.getElementById("modal-btn-pix").addEventListener("click", function() { abrirModalPix(); });
-      document.getElementById("modal-btn-presente").addEventListener("click", function() {
-        var p = MODAL_PROD.produto; if (!p) return;
-        window.open(wppLink(msgPresente(p)), "_blank");
-      });
-      var mpMainImg = document.getElementById("modal-prod-main-img");
-      if (mpMainImg) {
-        mpMainImg.addEventListener("click", function() {
-          if (!this.src) return;
-          var lbImg = document.getElementById("lightbox-img");
-          if (lbImg) lbImg.src = this.src;
-          if (lb) lb.classList.add("ativo");
-        });
+  // Modal Produto
+  var mp = document.getElementById("modal-produto");
+  var mpClose = document.getElementById("modal-prod-close");
+  if (mp) {
+    // Fechar pelo X
+    if (mpClose) mpClose.addEventListener("click", fecharModalProduto);
+    // Fechar clicando no fundo
+    mp.addEventListener("click", function(e) { if (e.target === mp) fecharModalProduto(); });
+    // Fechar pelo Escape
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        fecharModalProduto();
+        if (lb) lb.classList.remove("ativo");
       }
-    }
-  } catch(e) { console.error("modal-produto:", e); }
+    });
+    // Botão menos quantidade
+    document.getElementById("modal-qtd-menos").addEventListener("click", function() {
+      var el = document.getElementById("modal-qtd-num");
+      var v = parseInt(el.textContent) || 1;
+      if (v > 1) { v--; el.textContent = v; MODAL_PROD.quantidade = v; }
+    });
+    // Botão mais quantidade
+    document.getElementById("modal-qtd-mais").addEventListener("click", function() {
+      var el = document.getElementById("modal-qtd-num");
+      var v = parseInt(el.textContent) || 1;
+      if (v < 10) { v++; el.textContent = v; MODAL_PROD.quantidade = v; }
+    });
+    // Botão comprar
+    document.getElementById("modal-btn-comprar").addEventListener("click", function() {
+      var p = MODAL_PROD.produto;
+      if (!p) return;
+      window.open(wppLink(msgProduto(p, MODAL_PROD.tamanhoSel, MODAL_PROD.quantidade)), "_blank");
+    });
+    // Botão presente
+    document.getElementById("modal-btn-presente").addEventListener("click", function() {
+      var p = MODAL_PROD.produto;
+      if (!p) return;
+      window.open(wppLink(msgPresente(p)), "_blank");
+    });
+    // Foto principal abre lightbox
+    document.getElementById("modal-prod-main-img").addEventListener("click", function() {
+      if (!this.src) return;
+      document.getElementById("lightbox-img").src = this.src;
+      lb.classList.add("ativo");
+    });
+  }
 
-  // ── Modal Pix
-  try {
-    var mpix = document.getElementById("modal-pix");
-    var pixClose = document.getElementById("pix-close");
-    if (mpix) {
-      if (pixClose) pixClose.addEventListener("click", fecharModalPix);
-      mpix.addEventListener("click", function(e) { if (e.target === mpix) fecharModalPix(); });
-    }
-    var pixCopiar = document.getElementById("pix-copiar-btn");
-    if (pixCopiar) {
-      pixCopiar.addEventListener("click", function() {
-        var chave = document.getElementById("pix-chave-valor").textContent;
-        if (!chave) return;
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(chave).then(function() {
-            pixCopiar.textContent = "✓ Copiado!";
-            setTimeout(function() { pixCopiar.textContent = "Copiar"; }, 2000);
-          });
-        } else {
-          var ta = document.createElement("textarea");
-          ta.value = chave; document.body.appendChild(ta);
-          ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
-          pixCopiar.textContent = "✓ Copiado!";
-          setTimeout(function() { pixCopiar.textContent = "Copiar"; }, 2000);
-        }
-      });
-    }
-  } catch(e) { console.error("modal-pix:", e); }
+  // Quiz
+  iniciarQuiz();
+  document.getElementById("quiz-next").addEventListener("click", quizAvancar);
+  document.getElementById("quiz-reiniciar").addEventListener("click", iniciarQuiz);
 
-  // ── Uploads (imagens e vídeo)
-  try {
-    ["up-foto2","up-foto3","up-foto4"].forEach(function(upId) {
-      var el = document.getElementById(upId); if (!el) return;
-      el.addEventListener("change", function() {
-        var inputId = upId.replace("up-", "p-");
-        var inputEl = document.getElementById(inputId);
-        uploadArquivo(this.files[0], "produtos", function(url) {
-          if (inputEl) inputEl.value = url;
-          toast("✓ Foto carregada!");
-        });
+  // Upload foto produto — preview + preencher campo URL
+  var upFotoProd = document.getElementById("up-foto-prod");
+  if (upFotoProd) {
+    upFotoProd.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "produtos", function(url) {
+        document.getElementById("p-foto").value = url;
+        var prev = document.getElementById("prev-foto-prod");
+        prev.src = url; prev.style.display = "block";
+        toast("✓ Foto carregada!");
       });
     });
-    var upFotoProd = document.getElementById("up-foto-prod");
-    if (upFotoProd) {
-      upFotoProd.addEventListener("change", function() {
-        uploadArquivo(this.files[0], "produtos", function(url) {
-          document.getElementById("p-foto").value = url;
-          var prev = document.getElementById("prev-foto-prod");
-          if (prev) { prev.src = url; prev.style.display = "block"; }
-          toast("✓ Foto carregada!");
-        });
-      });
-    }
-    var pFoto = document.getElementById("p-foto");
-    if (pFoto) {
-      pFoto.addEventListener("input", function() {
-        var prev = document.getElementById("prev-foto-prod");
-        if (!prev) return;
-        if (this.value) { prev.src = this.value; prev.style.display = "block"; }
-        else prev.style.display = "none";
-      });
-    }
-    var upHero = document.getElementById("up-img-hero");
-    if (upHero) {
-      upHero.addEventListener("change", function() {
-        uploadArquivo(this.files[0], "layout", function(url) {
-          document.getElementById("cfg-img-hero").value = url;
-          var prev = document.getElementById("prev-img-hero");
-          if (prev) { prev.src = url; prev.style.display = "block"; }
-          toast("✓ Imagem carregada!");
-        });
-      });
-    }
-    var cfgHero = document.getElementById("cfg-img-hero");
-    if (cfgHero) {
-      cfgHero.addEventListener("input", function() {
-        var p = document.getElementById("prev-img-hero");
-        if (p && this.value) { p.src = this.value; p.style.display = "block"; }
-      });
-    }
-    var btnSalvHero = document.getElementById("btn-salvar-img-hero");
-    if (btnSalvHero) {
-      btnSalvHero.addEventListener("click", function() {
-        var url = document.getElementById("cfg-img-hero").value.trim();
-        if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
-        setBtn("btn-salvar-img-hero", true);
-        sb("config", { method:"PATCH", filtros:"chave=eq.img_hero", body:{ valor:url } })
-          .then(function() { STATE.cfg.img_hero = url; atualizarImgLayout("img_hero", url); toast("✓ Foto do hero salva!"); })
-          .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-          .finally(function() { setBtn("btn-salvar-img-hero", false); });
-      });
-    }
-    var upSobre = document.getElementById("up-img-sobre");
-    if (upSobre) {
-      upSobre.addEventListener("change", function() {
-        uploadArquivo(this.files[0], "layout", function(url) {
-          document.getElementById("cfg-img-sobre").value = url;
-          var prev = document.getElementById("prev-img-sobre");
-          if (prev) { prev.src = url; prev.style.display = "block"; }
-          toast("✓ Imagem carregada!");
-        });
-      });
-    }
-    var cfgSobre = document.getElementById("cfg-img-sobre");
-    if (cfgSobre) {
-      cfgSobre.addEventListener("input", function() {
-        var p = document.getElementById("prev-img-sobre");
-        if (p && this.value) { p.src = this.value; p.style.display = "block"; }
-      });
-    }
-    var btnSalvSobre = document.getElementById("btn-salvar-img-sobre");
-    if (btnSalvSobre) {
-      btnSalvSobre.addEventListener("click", function() {
-        var url = document.getElementById("cfg-img-sobre").value.trim();
-        if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
-        setBtn("btn-salvar-img-sobre", true);
-        sb("config", { method:"PATCH", filtros:"chave=eq.img_sobre", body:{ valor:url } })
-          .then(function() { STATE.cfg.img_sobre = url; atualizarImgLayout("img_sobre", url); toast("✓ Foto Sobre salva!"); })
-          .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-          .finally(function() { setBtn("btn-salvar-img-sobre", false); });
-      });
-    }
-    var upVideo = document.getElementById("up-video");
-    if (upVideo) {
-      upVideo.addEventListener("change", function() {
-        uploadArquivo(this.files[0], "layout", function(url) {
-          document.getElementById("cfg-video").value = url;
-          toast("✓ Vídeo carregado!");
-        });
-      });
-    }
-    var btnSalvVideo = document.getElementById("btn-salvar-video");
-    if (btnSalvVideo) {
-      btnSalvVideo.addEventListener("click", function() {
-        var url = document.getElementById("cfg-video").value.trim();
-        setBtn("btn-salvar-video", true);
-        sb("config", { method:"PATCH", filtros:"chave=eq.video_url", body:{ valor:url } })
-          .then(function() {
-            STATE.cfg.video_url = url;
-            var vid = document.getElementById("hero-video");
-            if (vid) { if (url) { vid.src = url; vid.style.display = "block"; vid.load(); vid.play().catch(function(){}); } else { vid.style.display = "none"; } }
-            toast(url ? "✓ Vídeo hero salvo!" : "✓ Vídeo removido.");
-          })
-          .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-          .finally(function() { setBtn("btn-salvar-video", false); });
-      });
-    }
-    var upPixQr = document.getElementById("up-pix-qr");
-    if (upPixQr) {
-      upPixQr.addEventListener("change", function() {
-        uploadArquivo(this.files[0], "layout", function(url) {
-          document.getElementById("cfg-pix-qr").value = url;
-          toast("✓ QR Code carregado!");
-        });
-      });
-    }
-  } catch(e) { console.error("uploads:", e); }
+  }
+  // Preview ao digitar URL produto
+  var pFoto = document.getElementById("p-foto");
+  if (pFoto) {
+    pFoto.addEventListener("input", function() {
+      var prev = document.getElementById("prev-foto-prod");
+      if (this.value) { prev.src = this.value; prev.style.display = "block"; }
+      else prev.style.display = "none";
+    });
+  }
 
-  // ── Trocar senha
-  try {
-    var btnSenha = document.getElementById("btn-trocar-senha");
-    if (btnSenha) {
-      btnSenha.addEventListener("click", function() {
-        var atual    = document.getElementById("senha-atual").value;
-        var nova     = document.getElementById("senha-nova").value.trim();
-        var confirma = document.getElementById("senha-confirma").value.trim();
-        var senhaAtual = STATE.cfg.senha_admin || SENHA_ADM;
-        if (atual !== senhaAtual)    { toast("⚠️ Senha atual incorreta.", "erro"); return; }
-        if (!nova || nova.length < 4){ toast("⚠️ Nova senha deve ter ao menos 4 caracteres.", "erro"); return; }
-        if (nova !== confirma)       { toast("⚠️ As senhas não coincidem.", "erro"); return; }
-        setBtn("btn-trocar-senha", true);
-        sb("config", { method:"PATCH", filtros:"chave=eq.senha_admin", body:{ valor:nova } })
-          .then(function() {
-            STATE.cfg.senha_admin = nova; SENHA_ADM = nova;
-            document.getElementById("senha-atual").value = "";
-            document.getElementById("senha-nova").value = "";
-            document.getElementById("senha-confirma").value = "";
-            toast("✓ Senha alterada com sucesso!");
-          })
-          .catch(function(e) { toast("Erro: " + e.message, "erro"); })
-          .finally(function() { setBtn("btn-trocar-senha", false); });
+  // Upload foto hero
+  var upHero = document.getElementById("up-img-hero");
+  if (upHero) {
+    upHero.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "layout", function(url) {
+        document.getElementById("cfg-img-hero").value = url;
+        var prev = document.getElementById("prev-img-hero");
+        prev.src = url; prev.style.display = "block";
+        toast("✓ Imagem carregada!");
       });
-    }
-  } catch(e) { console.error("senha:", e); }
+    });
+  }
+  var cfgHero = document.getElementById("cfg-img-hero");
+  if (cfgHero) {
+    cfgHero.addEventListener("input", function() {
+      var p = document.getElementById("prev-img-hero");
+      if (this.value) { p.src = this.value; p.style.display = "block"; }
+    });
+  }
+  var btnSalvHero = document.getElementById("btn-salvar-img-hero");
+  if (btnSalvHero) {
+    btnSalvHero.addEventListener("click", function() {
+      var url = document.getElementById("cfg-img-hero").value.trim();
+      if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
+      setBtn("btn-salvar-img-hero", true);
+      sb("config", { method:"PATCH", filtros:"chave=eq.img_hero", body:{ valor:url } })
+        .then(function() {
+          STATE.cfg.img_hero = url;
+          atualizarImgLayout("img_hero", url);
+          toast("✓ Foto do hero salva!");
+        })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-salvar-img-hero", false); });
+    });
+  }
 
-  // ── Quiz
-  try {
-    iniciarQuiz();
-    document.getElementById("quiz-next").addEventListener("click", quizAvancar);
-    document.getElementById("quiz-reiniciar").addEventListener("click", iniciarQuiz);
-  } catch(e) { console.error("quiz:", e); }
+  // Upload foto sobre
+  var upSobre = document.getElementById("up-img-sobre");
+  if (upSobre) {
+    upSobre.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "layout", function(url) {
+        document.getElementById("cfg-img-sobre").value = url;
+        var prev = document.getElementById("prev-img-sobre");
+        prev.src = url; prev.style.display = "block";
+        toast("✓ Imagem carregada!");
+      });
+    });
+  }
+  var cfgSobre = document.getElementById("cfg-img-sobre");
+  if (cfgSobre) {
+    cfgSobre.addEventListener("input", function() {
+      var p = document.getElementById("prev-img-sobre");
+      if (this.value) { p.src = this.value; p.style.display = "block"; }
+    });
+  }
+  var btnSalvSobre = document.getElementById("btn-salvar-img-sobre");
+  if (btnSalvSobre) {
+    btnSalvSobre.addEventListener("click", function() {
+      var url = document.getElementById("cfg-img-sobre").value.trim();
+      if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
+      setBtn("btn-salvar-img-sobre", true);
+      sb("config", { method:"PATCH", filtros:"chave=eq.img_sobre", body:{ valor:url } })
+        .then(function() {
+          STATE.cfg.img_sobre = url;
+          atualizarImgLayout("img_sobre", url);
+          toast("✓ Foto da seção Sobre salva!");
+        })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-salvar-img-sobre", false); });
+    });
+  }
 
+  // Upload fotos extras produto
+  ["up-foto2","up-foto3","up-foto4"].forEach(function(upId) {
+    var el = document.getElementById(upId);
+    if (!el) return;
+    el.addEventListener("change", function() {
+      var inputId = upId.replace("up-", "p-");
+      var inputEl = document.getElementById(inputId);
+      uploadArquivo(this.files[0], "produtos", function(url) {
+        if (inputEl) inputEl.value = url;
+        toast("✓ Foto carregada!");
+      });
+    });
+  });
+
+  // Upload vídeo hero
+  var upVideo = document.getElementById("up-video");
+  if (upVideo) {
+    upVideo.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "layout", function(url) {
+        document.getElementById("cfg-video").value = url;
+        toast("✓ Vídeo carregado!");
+      });
+    });
+  }
+  var btnSalvVideo = document.getElementById("btn-salvar-video");
+  if (btnSalvVideo) {
+    btnSalvVideo.addEventListener("click", function() {
+      var url = document.getElementById("cfg-video").value.trim();
+      setBtn("btn-salvar-video", true);
+      sb("config", { method:"PATCH", filtros:"chave=eq.video_url", body:{ valor:url } })
+        .then(function() {
+          STATE.cfg.video_url = url;
+          var vid = document.getElementById("hero-video");
+          if (vid) {
+            if (url) {
+              vid.src = url;
+              vid.style.display = "block";
+              vid.muted = true;
+              vid.load();
+              vid.addEventListener("canplay", function() {
+                vid.play().catch(function() {});
+              }, { once: true });
+            } else {
+              vid.style.display = "none";
+              vid.src = "";
+            }
+          }
+          toast(url ? "✓ Vídeo hero salvo!" : "✓ Vídeo removido.");
+        })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-salvar-video", false); });
+    });
+  }
+
+  // Trocar senha
+  var btnSenha = document.getElementById("btn-trocar-senha");
+  if (btnSenha) {
+    btnSenha.addEventListener("click", function() {
+      var atual     = document.getElementById("senha-atual").value;
+      var nova      = document.getElementById("senha-nova").value.trim();
+      var confirma  = document.getElementById("senha-confirma").value.trim();
+      var senhaAtual = STATE.cfg.senha_admin || SENHA_ADM;
+      if (atual !== senhaAtual)   { toast("⚠️ Senha atual incorreta.", "erro"); return; }
+      if (!nova || nova.length < 4) { toast("⚠️ Nova senha deve ter ao menos 4 caracteres.", "erro"); return; }
+      if (nova !== confirma)      { toast("⚠️ As senhas não coincidem.", "erro"); return; }
+      setBtn("btn-trocar-senha", true);
+      sb("config", { method:"PATCH", filtros:"chave=eq.senha_admin", body:{ valor:nova } })
+        .then(function() {
+          STATE.cfg.senha_admin = nova;
+          SENHA_ADM = nova;
+          document.getElementById("senha-atual").value = "";
+          document.getElementById("senha-nova").value = "";
+          document.getElementById("senha-confirma").value = "";
+          toast("✓ Senha alterada com sucesso!");
+        })
+        .catch(function(e) { toast("Erro: " + e.message, "erro"); })
+        .finally(function() { setBtn("btn-trocar-senha", false); });
+    });
+  }
 });
 </script>
 </body>
