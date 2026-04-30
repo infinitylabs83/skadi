@@ -501,9 +501,9 @@ footer{background:#111;}
       </div>
     </div>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="hero-stat-num">500+</div><div class="hero-stat-label">Clientes Felizes</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">3 anos</div><div class="hero-stat-label">De Excelência</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-label">Garantia</div></div>
+      <div class="hero-stat"><div id="stat1-num" class="hero-stat-num">500+</div><div id="stat1-label" class="hero-stat-label">Clientes Felizes</div></div>
+      <div class="hero-stat"><div id="stat2-num" class="hero-stat-num">3 anos</div><div id="stat2-label" class="hero-stat-label">De Excelência</div></div>
+      <div class="hero-stat"><div id="stat3-num" class="hero-stat-num">100%</div><div id="stat3-label" class="hero-stat-label">Garantia</div></div>
     </div>
   </div>
 </section>
@@ -840,6 +840,20 @@ footer{background:#111;}
     <div class="admin-card">
       <div class="admin-titulo">✏️ Textos da Página</div>
       <p class="admin-subtitulo">Edite todos os textos mantendo o estilo original</p>
+      <div style="margin-bottom:16px;background:var(--bege);padding:14px;border:1px solid var(--cinza-claro);">
+        <label class="admin-label" style="margin-bottom:10px;">Números do Hero (ex: 500+, 3 anos, 100%)</label>
+        <div class="admin-grid-3" style="margin-bottom:8px;">
+          <div><label class="admin-label">Número 1</label><input type="text" id="cfg-stat1-num" class="admin-input" placeholder="500+"/></div>
+          <div><label class="admin-label">Número 2</label><input type="text" id="cfg-stat2-num" class="admin-input" placeholder="3 anos"/></div>
+          <div><label class="admin-label">Número 3</label><input type="text" id="cfg-stat3-num" class="admin-input" placeholder="100%"/></div>
+        </div>
+        <div class="admin-grid-3">
+          <div><label class="admin-label">Legenda 1</label><input type="text" id="cfg-stat1-label" class="admin-input" placeholder="Clientes Felizes"/></div>
+          <div><label class="admin-label">Legenda 2</label><input type="text" id="cfg-stat2-label" class="admin-input" placeholder="De Excelência"/></div>
+          <div><label class="admin-label">Legenda 3</label><input type="text" id="cfg-stat3-label" class="admin-input" placeholder="Garantia"/></div>
+        </div>
+      </div>
+
       <div style="margin-bottom:12px;"><label class="admin-label">Hero — Título Principal</label><input type="text" id="cfg-hero-titulo" class="admin-input" placeholder="Elegância que transforma cada momento"/><p style="font-size:0.75rem;color:var(--cinza);margin-top:4px;">Use &lt;br/&gt; para quebrar linha. Use &lt;em&gt;palavra&lt;/em&gt; para destaque dourado.</p></div>
       <div style="margin-bottom:12px;"><label class="admin-label">Hero — Subtítulo</label><textarea id="cfg-hero-sub" class="admin-textarea" placeholder="Cada peça SKADI é uma obra de arte..."></textarea></div>
       <div style="margin-bottom:12px;"><label class="admin-label">Sobre — Título</label><input type="text" id="cfg-sobre-titulo" class="admin-input" placeholder="A arte de criar beleza acessível"/></div>
@@ -1495,6 +1509,16 @@ function aplicarConfig(m) {
   if (m.sobre_titulo)  { var el = document.getElementById("sobre-titulo"); if(el) el.innerHTML = m.sobre_titulo; }
   if (m.sobre_texto1)  { var el = document.getElementById("sobre-texto1"); if(el) el.textContent = m.sobre_texto1; }
   if (m.sobre_texto2)  { var el = document.getElementById("sobre-texto2"); if(el) el.textContent = m.sobre_texto2; }
+  // Stats do hero
+  var statMap = {
+    "stat1_num":"stat1-num","stat1_label":"stat1-label",
+    "stat2_num":"stat2-num","stat2_label":"stat2-label",
+    "stat3_num":"stat3-num","stat3_label":"stat3-label"
+  };
+  Object.keys(statMap).forEach(function(k) {
+    if (m[k]) { var el = document.getElementById(statMap[k]); if(el) el.textContent = m[k]; }
+  });
+
   var benefs = [[1],[2],[3],[4]];
   benefs.forEach(function(arr) {
     var n = arr[0];
@@ -1839,7 +1863,13 @@ function popularFormConfig(m) {
     "cfg-benef4-titulo":"benef4_titulo","cfg-benef4-texto":"benef4_texto",
     "cfg-pix-chave":   "pix_chave",
     "cfg-pix-nome":    "pix_nome",
-    "cfg-pix-qr":      "pix_qr"
+    "cfg-pix-qr":      "pix_qr",
+    "cfg-stat1-num":   "stat1_num",
+    "cfg-stat1-label": "stat1_label",
+    "cfg-stat2-num":   "stat2_num",
+    "cfg-stat2-label": "stat2_label",
+    "cfg-stat3-num":   "stat3_num",
+    "cfg-stat3-label": "stat3_label"
   };
   Object.keys(campos).forEach(function(elId) {
     var el = document.getElementById(elId);
@@ -2080,7 +2110,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Config geral
   document.getElementById("btn-salvar-config").addEventListener("click", function() {
     setBtn("btn-salvar-config", true);
-    salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video","cfg-pix-chave","cfg-pix-tipo","cfg-pix-nome","cfg-pix-qr"])
+    salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video","cfg-pix-chave","cfg-pix-tipo","cfg-pix-nome","cfg-pix-qr","cfg-stat1-num","cfg-stat1-label","cfg-stat2-num","cfg-stat2-label","cfg-stat3-num","cfg-stat3-label"])
       .then(function() {
         toast("✓ Configurações salvas!");
         try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {}
