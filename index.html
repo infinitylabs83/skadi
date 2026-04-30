@@ -666,7 +666,7 @@ footer{background:#111;}
       <input type="hidden" id="edit-id" value=""/>
       <div class="admin-grid-2" style="margin-bottom:12px;">
         <div><label class="admin-label">Nome da Peça *</label><input type="text" id="p-nome" class="admin-input" placeholder="Ex: Colar Lua Dourada"/></div>
-        <div><label class="admin-label">Categoria</label><select id="p-categoria" class="admin-input"><option value="">Selecionar...</option><option>Colares</option><option>Brincos</option><option>Anéis</option><option>Pulseiras</option><option>Tornozeleiras</option><option>Conjuntos</option></select></div>
+        <div><label class="admin-label">Categoria</label><select id="p-categoria" class="admin-input"><option value="">Selecionar...</option><option>Colares</option><option>Brincos</option><option>Anéis</option><option>Pulseiras</option><option>Tornozeleiras</option><option>Conjuntos</option><option>Acessórios</option></select></div>
       </div>
       <div style="margin-bottom:12px;"><label class="admin-label">Descrição Curta *</label><input type="text" id="p-desc" class="admin-input" placeholder="Ex: Colar delicado com pingente em banho de ouro 18k"/></div>
       <div class="admin-grid-3" style="margin-bottom:12px;">
@@ -678,7 +678,7 @@ footer{background:#111;}
         <label class="admin-label">Badge de Escassez <span style="font-size:0.72rem;font-weight:400;text-transform:none;letter-spacing:0;">(opcional — ex: "Últimas 3 unidades")</span></label>
         <input type="text" id="p-badge" class="admin-input" placeholder="Ex: Últimas unidades • Só hoje • Imperdível"/>
       </div>
-      <div style="margin-bottom:18px;">
+      <div id="tamanhos-field-wrap" style="margin-bottom:18px;">
         <label class="admin-label">Foto do Produto *</label>
         <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
           <img id="prev-foto-prod" src="" style="width:72px;height:72px;object-fit:cover;border:1px solid var(--cinza-claro);border-radius:2px;display:none;flex-shrink:0;"/>
@@ -1871,12 +1871,31 @@ function salvarConfigs(ids) {
     "cfg-benef1-titulo":"benef1_titulo","cfg-benef1-texto":"benef1_texto",
     "cfg-benef2-titulo":"benef2_titulo","cfg-benef2-texto":"benef2_texto",
     "cfg-benef3-titulo":"benef3_titulo","cfg-benef3-texto":"benef3_texto",
-    "cfg-benef4-titulo":"benef4_titulo","cfg-benef4-texto":"benef4_texto"
+    "cfg-benef4-titulo":"benef4_titulo","cfg-benef4-texto":"benef4_texto",
+    "cfg-pix-chave":    "pix_chave",
+    "cfg-pix-tipo":     "pix_tipo",
+    "cfg-pix-nome":     "pix_nome",
+    "cfg-pix-qr":       "pix_qr"
   };
   var promises = ids.map(function(elId) {
     var chave = campos[elId];
-    var valor = (document.getElementById(elId) || {}).value || "";
-    return sb("config", { method:"PATCH", filtros:"chave=eq."+chave, body:{ valor:valor } });
+    if (!chave) { console.warn("Chave não mapeada para:", elId); return Promise.resolve(); }
+    var el = document.getElementById(elId);
+    var valor = el ? el.value : "";
+    // UPSERT direto — cria se não existe, atualiza se existe
+    return fetch(SUPA_URL + "/rest/v1/config", {
+      method:  "POST",
+      headers: {
+        "apikey":        SUPA_KEY,
+        "Authorization": "Bearer " + SUPA_KEY,
+        "Content-Type":  "application/json",
+        "Prefer":        "resolution=merge-duplicates"
+      },
+      body: JSON.stringify({ chave: chave, valor: valor })
+    }).then(function(r) {
+      if (!r.ok) return r.text().then(function(t) { throw new Error(t); });
+      return null;
+    });
   });
   return Promise.all(promises);
 }
