@@ -1120,7 +1120,7 @@ function setBtn(id, loading) {
 // ============================================================
 // ── CACHE local (stale-while-revalidate)
 var CACHE_KEY_PROD = "skadi_cache_produtos";
-var CACHE_KEY_CFG  = "skadi_cache_config";
+var CACHE_KEY_CFG  = "skadi_cache_cfg_v3";
 var CACHE_KEY_LOOK = "skadi_cache_looks";
 var CACHE_TTL      = 5 * 60 * 1000; // 5 minutos
 
@@ -1195,7 +1195,8 @@ function carregarTudo() {
       var m = {};
       cfgs.forEach(function(c) { m[c.chave] = c.valor || ""; });
       cacheSet(CACHE_KEY_CFG, m);
-      STATE.cfg = m;
+      // Merge completo — não substituir, garantir todos os campos
+      Object.keys(m).forEach(function(k) { STATE.cfg[k] = m[k]; });
       STATE.siteUrl = m.site_url || "https://infinitylabs83.github.io/skadi";
       aplicarConfig(m);
     }).catch(function(e) { console.error("config:", e); });
@@ -2061,7 +2062,15 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("btn-salvar-config").addEventListener("click", function() {
     setBtn("btn-salvar-config", true);
     salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video","cfg-pix-chave","cfg-pix-tipo","cfg-pix-nome","cfg-pix-qr"])
-      .then(function() { toast("✓ Configurações salvas!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
+      .then(function() {
+        toast("✓ Configurações salvas!");
+        try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {}
+        // Recarregar config fresca do banco no STATE.cfg imediatamente
+        sb("config", { select: "chave,valor" }).then(function(cfgs) {
+          if (cfgs) { var m = {}; cfgs.forEach(function(c){ m[c.chave]=c.valor||""; }); STATE.cfg=m; aplicarConfig(m); }
+        });
+        carregarTudo();
+      })
       .catch(function(e) { toast("Erro: " + e.message, "erro"); })
       .finally(function() { setBtn("btn-salvar-config", false); });
   });
