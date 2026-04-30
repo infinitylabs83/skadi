@@ -42,10 +42,15 @@ body{margin:0;background:var(--bege);color:var(--preto);font-family:'Jost',sans-
 #inicio{min-height:100svh;background:linear-gradient(160deg,#1C1C1C 0%,#2d2416 55%,#1a1208 100%);display:flex;align-items:center;padding-top:68px;position:relative;overflow:hidden;}
 @media(min-width:768px){#inicio{padding-top:80px;}}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.25;z-index:0;pointer-events:none;}
-.hero-video::-webkit-media-controls{display:none !important;}
-.hero-video::-webkit-media-controls-panel{display:none !important;}
-.hero-video::-webkit-media-controls-play-button{display:none !important;}
-.hero-video::-webkit-media-controls-start-playback-button{display:none !important;}
+.hero-video::-webkit-media-controls,
+.hero-video::-webkit-media-controls-panel,
+.hero-video::-webkit-media-controls-play-button,
+.hero-video::-webkit-media-controls-start-playback-button,
+.hero-video::-webkit-media-controls-overlay-play-button,
+.hero-video::-webkit-media-controls-panel-container,
+.hero-video::--webkit-media-controls-status-display{display:none !important;opacity:0 !important;}
+/* Cobrir o botão de play com um overlay transparente */
+#hero-video-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;}
 .hero-content{max-width:1280px;margin:0 auto;padding:40px 20px 48px;width:100%;position:relative;z-index:1;}
 @media(min-width:768px){.hero-content{padding:60px 32px 72px;}}
 .hero-grid{display:grid;gap:40px;align-items:center;}
@@ -386,6 +391,37 @@ footer{background:#111;}
 .skeleton-line.w70{width:70%;}
 .skeleton-line.w50{width:50%;}
 .skeleton-btn{height:38px;border-radius:2px;width:100%;margin-top:8px;}
+
+/* ── MODAL PIX ── */
+#modal-pix{display:none;position:fixed;inset:0;z-index:26000;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;}
+#modal-pix.ativo{display:flex;}
+@media(min-width:640px){#modal-pix{align-items:center;}}
+.pix-box{background:white;width:100%;max-width:460px;border-radius:16px 16px 0 0;overflow-y:auto;max-height:92svh;animation:slideUp 0.35s cubic-bezier(0.25,0.8,0.25,1);position:relative;}
+@media(min-width:640px){.pix-box{border-radius:8px;max-height:88svh;}}
+.pix-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--cinza-claro);position:sticky;top:0;background:white;z-index:2;}
+.pix-titulo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;color:var(--preto);}
+.pix-close{background:none;border:none;color:var(--cinza);font-size:1.5rem;cursor:pointer;padding:4px;line-height:1;-webkit-tap-highlight-color:transparent;}
+.pix-corpo{padding:24px 20px 32px;}
+.pix-produto-resumo{background:var(--bege);border:1px solid var(--cinza-claro);padding:14px 16px;margin-bottom:20px;border-radius:4px;}
+.pix-prod-nome{font-weight:500;font-size:0.95rem;color:var(--preto);margin-bottom:4px;}
+.pix-prod-detalhe{font-size:0.82rem;color:var(--cinza);}
+.pix-valor{text-align:center;margin-bottom:20px;padding:16px;background:var(--bege);border-radius:4px;}
+.pix-valor-label{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--cinza);margin-bottom:4px;}
+.pix-valor-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--ouro);font-weight:500;}
+.pix-qr{text-align:center;margin-bottom:20px;}
+.pix-qr img{width:180px;height:180px;border:1px solid var(--cinza-claro);padding:8px;}
+.pix-chave-wrap{background:#f5f5f5;border:1px solid #ddd;border-radius:4px;padding:12px 14px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.pix-chave-label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cinza);margin-bottom:2px;}
+.pix-chave-valor{font-size:0.9rem;font-weight:500;color:var(--preto);word-break:break-all;}
+.pix-copiar{background:var(--ouro);color:white;border:none;padding:8px 14px;font-size:0.75rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;border-radius:2px;font-family:'Jost',sans-serif;flex-shrink:0;transition:background 0.2s;-webkit-tap-highlight-color:transparent;}
+.pix-copiar:hover{background:var(--ouro-esc);}
+.pix-instrucao{background:#FFF8E6;border:1px solid #F0D060;border-radius:4px;padding:14px 16px;margin-bottom:20px;font-size:0.85rem;line-height:1.6;color:#7a5c00;}
+.pix-instrucao strong{display:block;margin-bottom:4px;font-size:0.88rem;}
+.pix-instrucao ol{margin:8px 0 0 16px;padding:0;}
+.pix-instrucao li{margin-bottom:4px;}
+.pix-btn-comprovante{display:block;width:100%;text-align:center;background:#25D366;color:white;border:none;padding:16px;font-size:0.85rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;border-radius:2px;transition:background 0.3s;-webkit-tap-highlight-color:transparent;text-decoration:none;}
+.pix-btn-comprovante:hover{background:#1ea952;}
+.pix-aviso-final{text-align:center;font-size:0.78rem;color:var(--cinza);margin-top:12px;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -426,7 +462,8 @@ footer{background:#111;}
 
 <!-- HERO -->
 <section id="inicio">
-  <video id="hero-video" class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" style="display:none;" poster=""></video>
+  <div id="hero-video-overlay"></div>
+  <video id="hero-video" class="hero-video" muted loop playsinline webkit-playsinline preload="auto" style="display:none;" poster="" x5-video-player-type="h5" x5-video-player-fullscreen="false" x5-video-orientation="portrait"></video>
   <div style="position:absolute;inset:0;pointer-events:none;z-index:0;">
     <div style="position:absolute;top:-15%;right:-8%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(201,166,107,0.07) 0%,transparent 70%);"></div>
   </div>
@@ -697,6 +734,30 @@ footer{background:#111;}
       </div>
       <div style="margin-bottom:12px;"><label class="admin-label">Banner do topo (vazio = ocultar)</label><input type="text" id="cfg-banner" class="admin-input" placeholder="Ex: 🎁 Frete grátis acima de R$ 200!"/></div>
       <div style="margin-bottom:18px;"><label class="admin-label">Barra de Garantia</label><input type="text" id="cfg-garantia" class="admin-input" placeholder="🔄 Troca em 7 dias • 🎁 Embalagem para presente • 🚚 Frete grátis acima de R$ 200"/></div>
+      <div style="background:var(--bege);border:1px solid var(--cinza-claro);padding:16px;border-radius:2px;margin-bottom:18px;">
+        <p class="admin-label" style="margin-bottom:12px;">💚 Configurações do Pix</p>
+        <div class="admin-grid-2" style="margin-bottom:10px;">
+          <div><label class="admin-label">Tipo da Chave</label>
+            <select id="cfg-pix-tipo" class="admin-input">
+              <option value="CPF">CPF</option><option value="CNPJ">CNPJ</option>
+              <option value="Telefone">Telefone</option><option value="E-mail">E-mail</option>
+              <option value="Chave aleatória">Chave aleatória</option>
+            </select>
+          </div>
+          <div><label class="admin-label">Chave Pix *</label>
+            <input type="text" id="cfg-pix-chave" class="admin-input" placeholder="Ex: 85999998888"/>
+          </div>
+        </div>
+        <div style="margin-bottom:10px;"><label class="admin-label">Nome do Favorecido</label>
+          <input type="text" id="cfg-pix-nome" class="admin-input" placeholder="Ex: SKADI SEMI JOIAS"/>
+        </div>
+        <div><label class="admin-label">URL do QR Code Pix</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="url" id="cfg-pix-qr" class="admin-input" placeholder="https://... link da imagem do QR Code"/>
+            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-pix-qr" accept="image/*" style="display:none;"/></label>
+          </div>
+        </div>
+      </div>
       <button id="btn-salvar-config" class="admin-btn" style="width:auto;margin-bottom:0;">💾 Salvar Configurações</button>
     </div>
 
@@ -848,8 +909,57 @@ footer{background:#111;}
       <!-- Botões -->
       <div class="modal-prod-btns">
         <button class="modal-btn-comprar" id="modal-btn-comprar">Comprar via WhatsApp</button>
+        <button id="modal-btn-pix" style="display:block;width:100%;text-align:center;background:#32a85a;color:white;border:none;padding:14px;font-size:0.85rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:background 0.3s;-webkit-tap-highlight-color:transparent;">💚 Pagar via Pix</button>
         <button class="modal-btn-presente" id="modal-btn-presente">🎁 Comprar como Presente</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PIX -->
+<div id="modal-pix">
+  <div class="pix-box">
+    <div style="width:40px;height:4px;border-radius:2px;background:var(--cinza-claro);margin:12px auto 0;"></div>
+    <div class="pix-header">
+      <span class="pix-titulo">💚 Pagar via Pix</span>
+      <button class="pix-close" id="pix-close">✕</button>
+    </div>
+    <div class="pix-corpo">
+      <div class="pix-produto-resumo">
+        <div class="pix-prod-nome" id="pix-prod-nome"></div>
+        <div class="pix-prod-detalhe" id="pix-prod-detalhe"></div>
+      </div>
+      <div class="pix-valor">
+        <div class="pix-valor-label">Valor a pagar</div>
+        <div class="pix-valor-num" id="pix-valor-num">R$ 0,00</div>
+      </div>
+      <div class="pix-qr">
+        <img id="pix-qr-img" src="" alt="QR Code Pix" style="display:none;"/>
+        <p style="font-size:0.78rem;color:var(--cinza);margin-top:8px;">Abra o app do seu banco e escaneie o QR Code</p>
+      </div>
+      <div>
+        <div style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--cinza);margin-bottom:8px;">Ou copie a chave Pix</div>
+        <div class="pix-chave-wrap">
+          <div>
+            <div class="pix-chave-label" id="pix-tipo-label">Chave Pix</div>
+            <div class="pix-chave-valor" id="pix-chave-valor"></div>
+          </div>
+          <button class="pix-copiar" id="pix-copiar-btn">Copiar</button>
+        </div>
+      </div>
+      <div class="pix-instrucao">
+        <strong>📋 Como pagar:</strong>
+        <ol>
+          <li>Abra o app do seu banco ou carteira digital</li>
+          <li>Escaneie o QR Code <strong>ou</strong> cole a chave Pix acima</li>
+          <li>Confirme o valor e finalize o pagamento</li>
+          <li>Clique no botão verde abaixo para nos enviar o comprovante</li>
+        </ol>
+      </div>
+      <a class="pix-btn-comprovante" id="pix-btn-comprovante" href="#" target="_blank">
+        📲 Enviar Comprovante via WhatsApp
+      </a>
+      <p class="pix-aviso-final">Após confirmarmos o pagamento, entraremos em contato<br/>para confirmar os dados de entrega. 📦</p>
     </div>
   </div>
 </div>
@@ -1179,7 +1289,9 @@ function abrirModalProduto(pid) {
   var tamWrap    = document.getElementById("modal-prod-tamanhos");
   var tamLabel   = document.getElementById("modal-tam-sel-label");
   if (tamLabel) tamLabel.textContent = "";
-  if (p.tamanhos) {
+  var catComTamanho = ["Anéis", "Pulseiras", "Tornozeleiras"]; // Acessórios não usa tamanho
+  var usaTamanho = p.tamanhos && catComTamanho.indexOf(p.categoria) !== -1;
+  if (usaTamanho) {
     var tams = p.tamanhos.split(",").map(function(t){ return t.trim(); }).filter(Boolean);
     if (tams.length && tamWrap) {
       tamWrap.innerHTML = tams.map(function(t) {
@@ -1338,26 +1450,33 @@ function aplicarConfig(m) {
 
   var vid = document.getElementById("hero-video");
   if (vid) {
-    if (m.video_url) {
-      vid.src = m.video_url;
+    var videoUrl = m.video_url || "";
+    if (videoUrl && videoUrl.trim() !== "") {
+      vid.muted    = true;
+      vid.loop     = true;
+      vid.setAttribute("playsinline", "");
+      vid.setAttribute("webkit-playsinline", "");
+      if (vid.getAttribute("data-src") !== videoUrl) {
+        vid.setAttribute("data-src", videoUrl);
+        vid.src = videoUrl;
+        vid.load();
+      }
       vid.style.display = "block";
-      vid.load();
-      // Forçar autoplay no iOS — precisa ser chamado dentro de evento de carregamento
-      var tryPlay = function() {
-        var p = vid.play();
-        if (p !== undefined) {
-          p.catch(function() {
-            // iOS bloqueou — tentar novamente com interação do usuário
-            vid.muted = true;
-            vid.play().catch(function() {});
-          });
+      function tentarPlay() {
+        if (vid.paused) {
+          var pr = vid.play();
+          if (pr !== undefined) {
+            pr.catch(function() { vid.muted = true; vid.play().catch(function(){}); });
+          }
         }
-      };
-      vid.addEventListener("canplay", tryPlay, { once: true });
-      tryPlay();
+      }
+      vid.addEventListener("loadedmetadata", function() { vid.muted = true; tentarPlay(); }, { once: true });
+      vid.addEventListener("canplaythrough", tentarPlay, { once: true });
+      setTimeout(tentarPlay, 800);
+      setTimeout(tentarPlay, 2000);
+      tentarPlay();
     } else {
       vid.style.display = "none";
-      vid.src = "";
     }
   }
   // Imagens de layout
@@ -1786,6 +1905,51 @@ function aplicarImgsLayout(m) {
 }
 
 // ============================================================
+// PIX — ABRIR / FECHAR
+// ============================================================
+function abrirModalPix() {
+  var p = MODAL_PROD.produto;
+  if (!p) return;
+  var cfg = STATE.cfg;
+  if (!cfg.pix_chave) { toast("Chave Pix não configurada. Configure no painel admin.", "erro"); return; }
+  var temP  = p.preco_promo && Number(p.preco_promo) > 0;
+  var valor = temP ? Number(p.preco_promo) : Number(p.preco);
+  var qtd   = MODAL_PROD.quantidade || 1;
+  var total = valor * qtd;
+  var tam   = MODAL_PROD.tamanhoSel;
+  var nomeEl = document.getElementById("pix-prod-nome");
+  if (nomeEl) nomeEl.textContent = p.nome;
+  var detEl = document.getElementById("pix-prod-detalhe");
+  if (detEl) detEl.textContent = (tam ? "Tamanho: " + tam + "  " : "") + (qtd > 1 ? "Quantidade: " + qtd : "1 unidade");
+  var valorEl = document.getElementById("pix-valor-num");
+  if (valorEl) valorEl.textContent = fmt(total);
+  var qrImg = document.getElementById("pix-qr-img");
+  if (qrImg) { if (cfg.pix_qr) { qrImg.src = cfg.pix_qr; qrImg.style.display = "block"; } else { qrImg.style.display = "none"; } }
+  var tipoEl  = document.getElementById("pix-tipo-label");
+  var chaveEl = document.getElementById("pix-chave-valor");
+  if (tipoEl)  tipoEl.textContent  = cfg.pix_tipo  || "Chave Pix";
+  if (chaveEl) chaveEl.textContent = cfg.pix_chave || "";
+  var wpp = cfg.whatsapp || "5521999999999";
+  var msg = "Ola! Acabei de realizar o pagamento via Pix.\n\n"
+    + "Produto: " + p.nome + "\n"
+    + (tam ? "Tamanho: " + tam + "\n" : "")
+    + (qtd > 1 ? "Quantidade: " + qtd + "\n" : "")
+    + "Valor pago: " + fmt(total) + "\n\n"
+    + "Segue o comprovante em anexo.\n\n"
+    + "Meu endereco de entrega:\n"
+    + "Rua / Numero:\nBairro:\nCidade / Estado:\nCEP:\nTelefone:";
+  var btnComp = document.getElementById("pix-btn-comprovante");
+  if (btnComp) btnComp.href = "https://wa.me/" + wpp + "?text=" + encodeURIComponent(msg);
+  var mp = document.getElementById("modal-pix");
+  if (mp) mp.classList.add("ativo");
+}
+
+function fecharModalPix() {
+  var mp = document.getElementById("modal-pix");
+  if (mp) mp.classList.remove("ativo");
+}
+
+// ============================================================
 // INIT
 // ============================================================
 document.addEventListener("DOMContentLoaded", function() {
@@ -1824,7 +1988,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Config geral
   document.getElementById("btn-salvar-config").addEventListener("click", function() {
     setBtn("btn-salvar-config", true);
-    salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video"])
+    salvarConfigs(["cfg-wpp","cfg-site-url","cfg-banner","cfg-garantia","cfg-video","cfg-pix-chave","cfg-pix-tipo","cfg-pix-nome","cfg-pix-qr"])
       .then(function() { toast("✓ Configurações salvas!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
       .catch(function(e) { toast("Erro: " + e.message, "erro"); })
       .finally(function() { setBtn("btn-salvar-config", false); });
@@ -1882,6 +2046,10 @@ document.addEventListener("DOMContentLoaded", function() {
       if (!p) return;
       window.open(wppLink(msgProduto(p, MODAL_PROD.tamanhoSel, MODAL_PROD.quantidade)), "_blank");
     });
+    // Botão Pix
+    var btnPix = document.getElementById("modal-btn-pix");
+    if (btnPix) btnPix.addEventListener("click", function() { abrirModalPix(); });
+
     // Botão presente
     document.getElementById("modal-btn-presente").addEventListener("click", function() {
       var p = MODAL_PROD.produto;
@@ -1895,6 +2063,46 @@ document.addEventListener("DOMContentLoaded", function() {
       lb.classList.add("ativo");
     });
   }
+
+  // Modal Pix
+  var mpix = document.getElementById("modal-pix");
+  var pixClose = document.getElementById("pix-close");
+  if (mpix) {
+    if (pixClose) pixClose.addEventListener("click", fecharModalPix);
+    mpix.addEventListener("click", function(e) { if (e.target === mpix) fecharModalPix(); });
+  }
+  var pixCopiar = document.getElementById("pix-copiar-btn");
+  if (pixCopiar) {
+    pixCopiar.addEventListener("click", function() {
+      var chave = document.getElementById("pix-chave-valor").textContent;
+      if (!chave) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(chave).then(function() {
+          pixCopiar.textContent = "✓ Copiado!";
+          setTimeout(function() { pixCopiar.textContent = "Copiar"; }, 2000);
+        });
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = chave; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+        pixCopiar.textContent = "✓ Copiado!";
+        setTimeout(function() { pixCopiar.textContent = "Copiar"; }, 2000);
+      }
+    });
+  }
+  var upPixQr = document.getElementById("up-pix-qr");
+  if (upPixQr) {
+    upPixQr.addEventListener("change", function() {
+      uploadArquivo(this.files[0], "layout", function(url) {
+        var el = document.getElementById("cfg-pix-qr");
+        if (el) el.value = url;
+        toast("✓ QR Code carregado!");
+      });
+    });
+  }
+
+  // Config Pix no salvarConfig
+  // (já é tratado na função salvarConfigs — apenas adicionar as chaves)
 
   // Quiz
   iniciarQuiz();
