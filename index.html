@@ -762,11 +762,18 @@ footer{background:#111;}
         <div style="margin-bottom:10px;"><label class="admin-label">Nome do Favorecido</label>
           <input type="text" id="cfg-pix-nome" class="admin-input" placeholder="Ex: SKADI SEMI JOIAS"/>
         </div>
-        <div><label class="admin-label">URL do QR Code Pix</label>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <input type="url" id="cfg-pix-qr" class="admin-input" placeholder="https://... link da imagem do QR Code"/>
-            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-pix-qr" accept="image/*" style="display:none;"/></label>
+        <div>
+          <label class="admin-label">QR Code Pix (imagem)</label>
+          <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
+            <img id="prev-pix-qr" src="" style="width:64px;height:64px;object-fit:cover;border:1px solid var(--cinza-claro);display:none;flex-shrink:0;"/>
+            <div style="flex:1;">
+              <input type="url" id="cfg-pix-qr" class="admin-input" placeholder="Cole o link da imagem aqui" style="margin-bottom:6px;"/>
+              <label class="admin-btn azul" style="cursor:pointer;padding:10px 14px;font-size:0.78rem;width:auto;display:inline-flex;">
+                📷 Upload do QR Code<input type="file" id="up-pix-qr" accept="image/*" style="display:none;"/>
+              </label>
+            </div>
           </div>
+          <p style="font-size:0.75rem;color:var(--cinza);">💡 Gere seu QR Code em <a href="https://gerarqrcode.com.br" target="_blank" style="color:var(--ouro);">gerarqrcode.com.br</a></p>
         </div>
       </div>
       <button id="btn-salvar-config" class="admin-btn" style="width:auto;margin-bottom:0;">💾 Salvar Configurações</button>
@@ -1828,12 +1835,22 @@ function popularFormConfig(m) {
     "cfg-benef1-titulo":"benef1_titulo","cfg-benef1-texto":"benef1_texto",
     "cfg-benef2-titulo":"benef2_titulo","cfg-benef2-texto":"benef2_texto",
     "cfg-benef3-titulo":"benef3_titulo","cfg-benef3-texto":"benef3_texto",
-    "cfg-benef4-titulo":"benef4_titulo","cfg-benef4-texto":"benef4_texto"
+    "cfg-benef4-titulo":"benef4_titulo","cfg-benef4-texto":"benef4_texto",
+    "cfg-pix-chave":   "pix_chave",
+    "cfg-pix-nome":    "pix_nome",
+    "cfg-pix-qr":      "pix_qr"
   };
   Object.keys(campos).forEach(function(elId) {
     var el = document.getElementById(elId);
     if (el) el.value = m[campos[elId]] || "";
   });
+  // Select de tipo Pix precisa de tratamento especial
+  var pixTipoEl = document.getElementById("cfg-pix-tipo");
+  if (pixTipoEl && m["pix_tipo"]) pixTipoEl.value = m["pix_tipo"];
+  // Preview QR Code se já tiver URL
+  var prevQr = document.getElementById("prev-pix-qr");
+  var qrUrl  = m["pix_qr"] || "";
+  if (prevQr && qrUrl) { prevQr.src = qrUrl; prevQr.style.display = "block"; }
 }
 
 function salvarConfigs(ids) {
@@ -1956,6 +1973,14 @@ function aplicarImgsLayout(m) {
 function abrirModalPix() {
   var p = MODAL_PROD.produto;
   if (!p) return;
+  // Buscar config fresca do banco — garante dados atualizados
+  sb("config", { select: "chave,valor" }).then(function(cfgs) {
+    if (cfgs) cfgs.forEach(function(c) { STATE.cfg[c.chave] = c.valor || ""; });
+    _executarAbrirPix(p);
+  }).catch(function() { _executarAbrirPix(p); });
+}
+
+function _executarAbrirPix(p) {
   var cfg = STATE.cfg;
   if (!cfg.pix_chave) { toast("Chave Pix não configurada. Configure no painel admin.", "erro"); return; }
   var temP  = p.preco_promo && Number(p.preco_promo) > 0;
@@ -2141,10 +2166,22 @@ document.addEventListener("DOMContentLoaded", function() {
   if (upPixQr) {
     upPixQr.addEventListener("change", function() {
       uploadArquivo(this.files[0], "layout", function(url) {
-        var el = document.getElementById("cfg-pix-qr");
-        if (el) el.value = url;
+        var elUrl  = document.getElementById("cfg-pix-qr");
+        var elPrev = document.getElementById("prev-pix-qr");
+        if (elUrl)  elUrl.value = url;
+        if (elPrev) { elPrev.src = url; elPrev.style.display = "block"; }
         toast("✓ QR Code carregado!");
       });
+    });
+  }
+  // Preview ao digitar URL do QR Code
+  var cfgPixQr = document.getElementById("cfg-pix-qr");
+  if (cfgPixQr) {
+    cfgPixQr.addEventListener("input", function() {
+      var prev = document.getElementById("prev-pix-qr");
+      if (!prev) return;
+      if (this.value) { prev.src = this.value; prev.style.display = "block"; }
+      else prev.style.display = "none";
     });
   }
 
