@@ -422,6 +422,17 @@ footer{background:#111;}
 .pix-btn-comprovante{display:block;width:100%;text-align:center;background:#25D366;color:white;border:none;padding:16px;font-size:0.85rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;border-radius:2px;transition:background 0.3s;-webkit-tap-highlight-color:transparent;text-decoration:none;}
 .pix-btn-comprovante:hover{background:#1ea952;}
 .pix-aviso-final{text-align:center;font-size:0.78rem;color:var(--cinza);margin-top:12px;line-height:1.5;}
+
+/* ── FRETE E TOTAL NO MODAL ── */
+.modal-frete-box{background:var(--bege);border:1px solid var(--cinza-claro);border-radius:4px;padding:14px 16px;margin-bottom:16px;}
+.modal-frete-linha{display:flex;justify-content:space-between;align-items:center;font-size:0.88rem;margin-bottom:6px;}
+.modal-frete-linha:last-child{margin-bottom:0;}
+.modal-frete-label{color:var(--cinza);}
+.modal-frete-valor{font-weight:500;color:var(--preto);}
+.modal-total-linha{display:flex;justify-content:space-between;align-items:center;padding-top:10px;margin-top:6px;border-top:1px solid var(--cinza-claro);}
+.modal-total-label{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cinza);}
+.modal-total-valor{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;color:var(--ouro);}
+.modal-frete-aviso{font-size:0.75rem;color:var(--cinza);margin-top:6px;line-height:1.4;}
 </style>
 </head>
 <body>
@@ -906,6 +917,23 @@ footer{background:#111;}
           <button class="modal-qtd-btn" id="modal-qtd-mais">+</button>
         </div>
       </div>
+      <!-- Frete + Total -->
+      <div class="modal-frete-box">
+        <div class="modal-frete-linha">
+          <span class="modal-frete-label">Subtotal</span>
+          <span class="modal-frete-valor" id="modal-subtotal">R$ 0,00</span>
+        </div>
+        <div class="modal-frete-linha">
+          <span class="modal-frete-label">🚚 Frete</span>
+          <span style="font-size:0.85rem;color:var(--cinza);font-style:italic;">A combinar via WhatsApp</span>
+        </div>
+        <div class="modal-total-linha">
+          <span class="modal-total-label">Total estimado</span>
+          <span class="modal-total-valor" id="modal-total">R$ 0,00 + frete</span>
+        </div>
+        <p class="modal-frete-aviso">📍 O frete será calculado e combinado via WhatsApp antes do envio</p>
+      </div>
+
       <!-- Botões -->
       <div class="modal-prod-btns">
         <button class="modal-btn-comprar" id="modal-btn-comprar">Comprar via WhatsApp</button>
@@ -1023,16 +1051,20 @@ function wppLink(texto, wpp) {
 }
 
 function msgProduto(p, tamanho, quantidade) {
-  var px  = (p.preco_promo && Number(p.preco_promo) > 0) ? fmt(p.preco_promo) : fmt(p.preco);
-  var url = STATE.siteUrl ? STATE.siteUrl + "/#produto-" + p.id : "";
-  var txt = "Olá! Quero comprar este produto da SKADI:\n\n"
-           + "✦ " + p.nome + "\n"
-           + p.descricao + "\n"
-           + "Preço: " + px + "\n";
-  if (tamanho)    txt += "Tamanho: " + tamanho + "\n";
-  if (quantidade && quantidade > 1) txt += "Quantidade: " + quantidade + "\n";
-  if (url)        txt += "\nVeja aqui: " + url;
-  txt += "\n\nPode confirmar disponibilidade?";
+  var temP  = p.preco_promo && Number(p.preco_promo) > 0;
+  var preco = temP ? Number(p.preco_promo) : Number(p.preco);
+  var qtd   = quantidade || 1;
+  var sub   = preco * qtd;
+  var url   = STATE.siteUrl ? STATE.siteUrl + "/#produto-" + p.id : "";
+  var txt   = "Olá! Quero comprar este produto da SKADI 🛍️\n\n"
+            + "✦ *" + p.nome + "*\n"
+            + p.descricao + "\n";
+  if (tamanho) txt += "📏 Tamanho: " + tamanho + "\n";
+  if (qtd > 1) txt += "🔢 Quantidade: " + qtd + "\n";
+  txt += "💰 Subtotal: " + fmt(sub) + "\n"
+       + "🚚 Frete: a combinar\n";
+  if (url) txt += "\n🔗 " + url;
+  txt += "\n\nPode confirmar disponibilidade e me informar o frete para meu endereço?";
   return txt;
 }
 
@@ -1317,9 +1349,23 @@ function abrirModalProduto(pid) {
   var qtdEl = document.getElementById("modal-qtd-num");
   if (qtdEl) qtdEl.textContent = "1";
 
+  // Subtotal/total inicial
+  atualizarTotalModal(p, 1);
+
   // Abrir modal
   document.getElementById("modal-produto").classList.add("ativo");
   document.body.style.overflow = "hidden";
+}
+
+function atualizarTotalModal(p, qtd) {
+  if (!p) return;
+  var temP  = p.preco_promo && Number(p.preco_promo) > 0;
+  var preco = temP ? Number(p.preco_promo) : Number(p.preco);
+  var sub   = preco * (qtd || 1);
+  var subEl = document.getElementById("modal-subtotal");
+  var totEl = document.getElementById("modal-total");
+  if (subEl) subEl.textContent = fmt(sub);
+  if (totEl) totEl.textContent = fmt(sub) + " + frete";
 }
 
 function fecharModalProduto() {
@@ -1930,14 +1976,15 @@ function abrirModalPix() {
   if (tipoEl)  tipoEl.textContent  = cfg.pix_tipo  || "Chave Pix";
   if (chaveEl) chaveEl.textContent = cfg.pix_chave || "";
   var wpp = cfg.whatsapp || "5521999999999";
-  var msg = "Ola! Acabei de realizar o pagamento via Pix.\n\n"
-    + "Produto: " + p.nome + "\n"
-    + (tam ? "Tamanho: " + tam + "\n" : "")
-    + (qtd > 1 ? "Quantidade: " + qtd + "\n" : "")
-    + "Valor pago: " + fmt(total) + "\n\n"
-    + "Segue o comprovante em anexo.\n\n"
-    + "Meu endereco de entrega:\n"
-    + "Rua / Numero:\nBairro:\nCidade / Estado:\nCEP:\nTelefone:";
+  var msg = "Olá! Acabei de pagar via Pix. 💚\n\n"
+    + "🛍️ *Produto:* " + p.nome + "\n"
+    + (tam ? "📏 *Tamanho:* " + tam + "\n" : "")
+    + "🔢 *Quantidade:* " + qtd + "\n"
+    + "💰 *Valor pago (produtos):* " + fmt(total) + "\n"
+    + "🚚 *Frete:* a combinar\n\n"
+    + "📎 *Segue o comprovante em anexo.*\n\n"
+    + "📍 *Meu endereço de entrega:*\n"
+    + "Rua / Número: \nBairro: \nCidade / Estado: \nCEP: \n📱 Telefone: ";
   var btnComp = document.getElementById("pix-btn-comprovante");
   if (btnComp) btnComp.href = "https://wa.me/" + wpp + "?text=" + encodeURIComponent(msg);
   var mp = document.getElementById("modal-pix");
@@ -2032,13 +2079,13 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("modal-qtd-menos").addEventListener("click", function() {
       var el = document.getElementById("modal-qtd-num");
       var v = parseInt(el.textContent) || 1;
-      if (v > 1) { v--; el.textContent = v; MODAL_PROD.quantidade = v; }
+      if (v > 1) { v--; el.textContent = v; MODAL_PROD.quantidade = v; atualizarTotalModal(MODAL_PROD.produto, v); }
     });
     // Botão mais quantidade
     document.getElementById("modal-qtd-mais").addEventListener("click", function() {
       var el = document.getElementById("modal-qtd-num");
       var v = parseInt(el.textContent) || 1;
-      if (v < 10) { v++; el.textContent = v; MODAL_PROD.quantidade = v; }
+      if (v < 10) { v++; el.textContent = v; MODAL_PROD.quantidade = v; atualizarTotalModal(MODAL_PROD.produto, v); }
     });
     // Botão comprar
     document.getElementById("modal-btn-comprar").addEventListener("click", function() {
