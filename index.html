@@ -2144,7 +2144,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // Textos
   document.getElementById("btn-salvar-textos").addEventListener("click", function() {
     setBtn("btn-salvar-textos", true);
-    salvarConfigs(["cfg-hero-titulo","cfg-hero-sub","cfg-sobre-titulo","cfg-sobre-texto1","cfg-sobre-texto2",
+    salvarConfigs(["cfg-stat1-num","cfg-stat1-label","cfg-stat2-num","cfg-stat2-label","cfg-stat3-num","cfg-stat3-label",
+      "cfg-hero-titulo","cfg-hero-sub","cfg-sobre-titulo","cfg-sobre-texto1","cfg-sobre-texto2",
       "cfg-benef1-titulo","cfg-benef1-texto","cfg-benef2-titulo","cfg-benef2-texto",
       "cfg-benef3-titulo","cfg-benef3-texto","cfg-benef4-titulo","cfg-benef4-texto"])
       .then(function() { toast("✓ Textos salvos!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
