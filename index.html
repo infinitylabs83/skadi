@@ -1037,6 +1037,23 @@ var SUPA_URL  = "https://dzjjaazgucxcpkdijehc.supabase.co";
 var SUPA_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amphYXpndWN4Y3BrZGlqZWhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MzMxOTYsImV4cCI6MjA5MjIwOTE5Nn0.FAAco55WJVMrwSYgqXXKr9zJsRJYaLZOxhVvYv3QHBs";
 var SENHA_ADM = "skadi2026"; // senha padrão — será sobrescrita pelo banco
 
+// UPSERT individual de config — cria ou atualiza
+function upsertConfig(chave, valor) {
+  return fetch(SUPA_URL + "/rest/v1/config", {
+    method: "POST",
+    headers: {
+      "apikey":        SUPA_KEY,
+      "Authorization": "Bearer " + SUPA_KEY,
+      "Content-Type":  "application/json",
+      "Prefer":        "resolution=merge-duplicates"
+    },
+    body: JSON.stringify({ chave: chave, valor: valor })
+  }).then(function(r) {
+    if (!r.ok) return r.text().then(function(t) { throw new Error(t); });
+    return null;
+  });
+}
+
 function sb(tabela, opts) {
   opts = opts || {};
   var method  = opts.method  || "GET";
@@ -2298,7 +2315,7 @@ document.addEventListener("DOMContentLoaded", function() {
       var url = document.getElementById("cfg-img-hero").value.trim();
       if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
       setBtn("btn-salvar-img-hero", true);
-      sb("config", { method:"PATCH", filtros:"chave=eq.img_hero", body:{ valor:url } })
+      upsertConfig("img_hero", url)
         .then(function() {
           STATE.cfg.img_hero = url;
           atualizarImgLayout("img_hero", url);
@@ -2334,7 +2351,7 @@ document.addEventListener("DOMContentLoaded", function() {
       var url = document.getElementById("cfg-img-sobre").value.trim();
       if (!url) { toast("Cole ou suba uma imagem primeiro.", "erro"); return; }
       setBtn("btn-salvar-img-sobre", true);
-      sb("config", { method:"PATCH", filtros:"chave=eq.img_sobre", body:{ valor:url } })
+      upsertConfig("img_sobre", url)
         .then(function() {
           STATE.cfg.img_sobre = url;
           atualizarImgLayout("img_sobre", url);
@@ -2374,7 +2391,7 @@ document.addEventListener("DOMContentLoaded", function() {
     btnSalvVideo.addEventListener("click", function() {
       var url = document.getElementById("cfg-video").value.trim();
       setBtn("btn-salvar-video", true);
-      sb("config", { method:"PATCH", filtros:"chave=eq.video_url", body:{ valor:url } })
+      upsertConfig("video_url", url)
         .then(function() {
           STATE.cfg.video_url = url;
           var vid = document.getElementById("hero-video");
@@ -2411,7 +2428,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (!nova || nova.length < 4) { toast("⚠️ Nova senha deve ter ao menos 4 caracteres.", "erro"); return; }
       if (nova !== confirma)      { toast("⚠️ As senhas não coincidem.", "erro"); return; }
       setBtn("btn-trocar-senha", true);
-      sb("config", { method:"PATCH", filtros:"chave=eq.senha_admin", body:{ valor:nova } })
+      upsertConfig("senha_admin", nova)
         .then(function() {
           STATE.cfg.senha_admin = nova;
           SENHA_ADM = nova;
