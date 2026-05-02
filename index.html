@@ -1151,7 +1151,7 @@ function setBtn(id, loading) {
 // ============================================================
 // ── CACHE local (stale-while-revalidate)
 var CACHE_KEY_PROD = "skadi_cache_produtos";
-var CACHE_KEY_CFG  = "skadi_cache_cfg_v3";
+var CACHE_KEY_CFG  = "skadi_cache_cfg_v4";
 var CACHE_KEY_LOOK = "skadi_cache_looks";
 var CACHE_TTL      = 5 * 60 * 1000; // 5 minutos
 
@@ -1922,7 +1922,13 @@ function salvarConfigs(ids) {
     "cfg-pix-chave":    "pix_chave",
     "cfg-pix-tipo":     "pix_tipo",
     "cfg-pix-nome":     "pix_nome",
-    "cfg-pix-qr":       "pix_qr"
+    "cfg-pix-qr":       "pix_qr",
+    "cfg-stat1-num":    "stat1_num",
+    "cfg-stat1-label":  "stat1_label",
+    "cfg-stat2-num":    "stat2_num",
+    "cfg-stat2-label":  "stat2_label",
+    "cfg-stat3-num":    "stat3_num",
+    "cfg-stat3-label":  "stat3_label"
   };
   var promises = ids.map(function(elId) {
     var chave = campos[elId];
@@ -2131,11 +2137,14 @@ document.addEventListener("DOMContentLoaded", function() {
       .then(function() {
         toast("✓ Configurações salvas!");
         try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {}
-        // Recarregar config fresca do banco no STATE.cfg imediatamente
         sb("config", { select: "chave,valor" }).then(function(cfgs) {
-          if (cfgs) { var m = {}; cfgs.forEach(function(c){ m[c.chave]=c.valor||""; }); STATE.cfg=m; aplicarConfig(m); }
+          if (!cfgs) return;
+          var m = {};
+          cfgs.forEach(function(c) { m[c.chave] = c.valor || ""; });
+          Object.keys(m).forEach(function(k) { STATE.cfg[k] = m[k]; });
+          aplicarConfig(m);
+          cacheSet(CACHE_KEY_CFG, m);
         });
-        carregarTudo();
       })
       .catch(function(e) { toast("Erro: " + e.message, "erro"); })
       .finally(function() { setBtn("btn-salvar-config", false); });
@@ -2148,7 +2157,19 @@ document.addEventListener("DOMContentLoaded", function() {
       "cfg-hero-titulo","cfg-hero-sub","cfg-sobre-titulo","cfg-sobre-texto1","cfg-sobre-texto2",
       "cfg-benef1-titulo","cfg-benef1-texto","cfg-benef2-titulo","cfg-benef2-texto",
       "cfg-benef3-titulo","cfg-benef3-texto","cfg-benef4-titulo","cfg-benef4-texto"])
-      .then(function() { toast("✓ Textos salvos!"); try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {} carregarTudo(); })
+      .then(function() {
+        toast("✓ Textos salvos!");
+        try { localStorage.removeItem(CACHE_KEY_CFG); } catch(e) {}
+        // Buscar do banco e aplicar imediatamente na página
+        sb("config", { select: "chave,valor" }).then(function(cfgs) {
+          if (!cfgs) return;
+          var m = {};
+          cfgs.forEach(function(c) { m[c.chave] = c.valor || ""; });
+          Object.keys(m).forEach(function(k) { STATE.cfg[k] = m[k]; });
+          aplicarConfig(m);
+          cacheSet(CACHE_KEY_CFG, m);
+        });
+      })
       .catch(function(e) { toast("Erro: " + e.message, "erro"); })
       .finally(function() { setBtn("btn-salvar-textos", false); });
   });
