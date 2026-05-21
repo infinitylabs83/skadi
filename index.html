@@ -2,6 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjMUMxQzFDIiByeD0iNCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iI0M5QTY2QiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U0s8L3RleHQ+PC9zdmc+"/>
+<link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjMUMxQzFDIiByeD0iNCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iI0M5QTY2QiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U0s8L3RleHQ+PC9zdmc+"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SKADI | Semi-Joias Elegantes</title>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -741,7 +743,7 @@ footer{background:#111;}
       <div class="admin-titulo">⚙️ Configurações da Loja</div>
       <div class="admin-grid-2" style="margin-bottom:12px;">
         <div><label class="admin-label">WhatsApp (55+DDD+número)</label><input type="tel" id="cfg-wpp" class="admin-input" placeholder="5585999998888"/></div>
-        <div><label class="admin-label">URL do Site</label><input type="url" id="cfg-site-url" class="admin-input" placeholder="https://infinitylabs83.github.io/skadi/"/></div>
+        <div><label class="admin-label">URL do Site</label><input type="url" id="cfg-site-url" class="admin-input" placeholder="https://skadisemijoias.com.br"/></div>
       </div>
       <div style="margin-bottom:12px;"><label class="admin-label">Banner do topo (vazio = ocultar)</label><input type="text" id="cfg-banner" class="admin-input" placeholder="Ex: 🎁 Frete grátis acima de R$ 200!"/></div>
       <div style="margin-bottom:18px;"><label class="admin-label">Barra de Garantia</label><input type="text" id="cfg-garantia" class="admin-input" placeholder="🔄 Troca em 7 dias • 🎁 Embalagem para presente • 🚚 Frete grátis acima de R$ 200"/></div>
@@ -1194,7 +1196,7 @@ function carregarTudo() {
   var cfgCache = cacheGet(CACHE_KEY_CFG);
   if (cfgCache) {
     STATE.cfg = cfgCache;
-    STATE.siteUrl = cfgCache.site_url || "https://infinitylabs83.github.io/skadi";
+    STATE.siteUrl = cfgCache.site_url || "https://skadisemijoias.com.br";
     aplicarConfig(cfgCache);
   }
 
@@ -1228,7 +1230,7 @@ function carregarTudo() {
       cacheSet(CACHE_KEY_CFG, m);
       // Merge completo — não substituir, garantir todos os campos
       Object.keys(m).forEach(function(k) { STATE.cfg[k] = m[k]; });
-      STATE.siteUrl = m.site_url || "https://infinitylabs83.github.io/skadi";
+      STATE.siteUrl = m.site_url || "https://skadisemijoias.com.br";
       aplicarConfig(m);
     }).catch(function(e) { console.error("config:", e); });
 
