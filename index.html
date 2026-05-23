@@ -1522,7 +1522,6 @@ function renderLoja(produtos) {
        + "<div class='card-nome'>" + p.nome + "</div>"
        + "<div class='card-desc'>" + p.descricao + "</div>"
        + "<div class='card-preco'>" + precoH + "</div>"
-       + 
        + (function(){
            var bl = getBenefList(p.beneficios);
            if (!bl.length) return "";
@@ -1533,7 +1532,7 @@ function renderLoja(produtos) {
            }).join("");
            return "<div style='display:flex;gap:5px;padding:4px 0 6px;'>" + icons + "</div>";
          })()
-       "<div style='margin-top:10px;background:var(--ouro);color:white;text-align:center;padding:10px 12px;font-size:clamp(0.68rem,1.8vw,0.72rem);font-weight:500;letter-spacing:0.1em;text-transform:uppercase;'>Ver Detalhes ✦</div>"
+       + "<div style='margin-top:10px;background:var(--ouro);color:white;text-align:center;padding:10px 12px;font-size:clamp(0.68rem,1.8vw,0.72rem);font-weight:500;letter-spacing:0.1em;text-transform:uppercase;'>Ver Detalhes ✦</div>"
        + "</div></div>";
   }
   grid.innerHTML = h;
