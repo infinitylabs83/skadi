@@ -1466,6 +1466,26 @@ function abrirModalProduto(pid) {
   var qtdEl = document.getElementById("modal-qtd-num");
   if (qtdEl) qtdEl.textContent = "1";
 
+  // Benefícios no modal
+  var benefEl = document.getElementById("modal-prod-beneficios");
+  if (benefEl) {
+    var bl = getBenefList(p.beneficios || "");
+    if (bl.length) {
+      benefEl.innerHTML = bl.map(function(k) {
+        var d = BENEF_DEFS[k];
+        return "<div class='modal-benef-item'>"
+          + d.svg.replace("viewBox", "class='modal-benef-icon' viewBox")
+          + "<span class='modal-benef-titulo'>" + d.titulo + "</span>"
+          + "<span class='modal-benef-sub'>" + d.sub + "</span>"
+          + "</div>";
+      }).join("");
+      benefEl.style.display = "flex";
+    } else {
+      benefEl.innerHTML = "";
+      benefEl.style.display = "none";
+    }
+  }
+
   // Subtotal/total inicial
   atualizarTotalModal(p, 1);
 
