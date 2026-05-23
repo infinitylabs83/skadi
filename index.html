@@ -425,6 +425,37 @@ footer{background:#111;}
 .pix-btn-comprovante:hover{background:#1ea952;}
 .pix-aviso-final{text-align:center;font-size:0.78rem;color:var(--cinza);margin-top:12px;line-height:1.5;}
 
+/* ── BENEFÍCIOS DO PRODUTO ── */
+.prod-beneficios-card{
+  display:flex;gap:6px;flex-wrap:wrap;
+  padding:4px 8px 6px;
+}
+.benef-icon-small{
+  width:22px;height:22px;opacity:0.85;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+}
+.modal-beneficios{
+  display:flex;gap:12px;flex-wrap:wrap;
+  padding:14px 0;margin-bottom:4px;
+  border-top:1px solid var(--cinza-claro);
+  border-bottom:1px solid var(--cinza-claro);
+}
+.modal-benef-item{
+  display:flex;flex-direction:column;align-items:center;
+  gap:5px;flex:1;min-width:80px;text-align:center;
+}
+.modal-benef-icon{
+  width:36px;height:36px;
+}
+.modal-benef-titulo{
+  font-size:0.7rem;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--preto);line-height:1.2;
+}
+.modal-benef-sub{
+  font-size:0.65rem;color:var(--cinza);letter-spacing:0.04em;
+  text-transform:uppercase;
+}
+
 /* ── FRETE E TOTAL NO MODAL ── */
 .modal-frete-box{background:var(--bege);border:1px solid var(--cinza-claro);border-radius:4px;padding:14px 16px;margin-bottom:16px;}
 .modal-frete-linha{display:flex;justify-content:space-between;align-items:center;font-size:0.88rem;margin-bottom:6px;}
@@ -680,6 +711,24 @@ footer{background:#111;}
         <label class="admin-label">Badge de Escassez <span style="font-size:0.72rem;font-weight:400;text-transform:none;letter-spacing:0;">(opcional — ex: "Últimas 3 unidades")</span></label>
         <input type="text" id="p-badge" class="admin-input" placeholder="Ex: Últimas unidades • Só hoje • Imperdível"/>
       </div>
+
+      <div style="margin-bottom:12px;">
+        <label class="admin-label">Benefícios do Produto</label>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:14px;background:var(--bege);border:1px solid var(--cinza-claro);border-radius:2px;">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;">
+            <input type="checkbox" id="benef-agua" value="agua" style="width:18px;height:18px;accent-color:var(--ouro);"/>
+            💧 À Prova D'água — Não Escurece
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;">
+            <input type="checkbox" id="benef-suor" value="suor" style="width:18px;height:18px;accent-color:var(--ouro);"/>
+            💪 À Prova de Suor — Não Esverdeija
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;">
+            <input type="checkbox" id="benef-garantia" value="garantia" style="width:18px;height:18px;accent-color:var(--ouro);"/>
+            ♾️ Garantia Vitalícia — Que Não Escurece
+          </label>
+        </div>
+      </div>
       <div id="tamanhos-field-wrap" style="margin-bottom:18px;">
         <label class="admin-label">Foto do Produto *</label>
         <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
@@ -922,6 +971,9 @@ footer{background:#111;}
       <p  id="modal-prod-desc" class="modal-prod-desc"></p>
       <div id="modal-prod-preco" class="modal-prod-preco"></div>
       <div class="modal-prod-divider"></div>
+      <!-- Benefícios -->
+      <div id="modal-prod-beneficios" class="modal-beneficios" style="display:none;margin-bottom:12px;"></div>
+
       <!-- Tamanhos -->
       <div id="modal-tam-section" style="display:none;">
         <div class="modal-prod-label">
@@ -1038,6 +1090,30 @@ footer{background:#111;}
 var SUPA_URL  = "https://dzjjaazgucxcpkdijehc.supabase.co";
 var SUPA_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amphYXpndWN4Y3BrZGlqZWhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MzMxOTYsImV4cCI6MjA5MjIwOTE5Nn0.FAAco55WJVMrwSYgqXXKr9zJsRJYaLZOxhVvYv3QHBs";
 var SENHA_ADM = "skadi2026"; // senha padrão — será sobrescrita pelo banco
+
+// ── ÍCONES DE BENEFÍCIOS ──
+var BENEF_DEFS = {
+  agua: {
+    titulo: "À Prova D\'água",
+    sub: "Não Escurece",
+    svg: '<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 4C20 4 8 16.5 8 24a12 12 0 0024 0C32 16.5 20 4 20 4z" fill="#C9A66B"/><path d="M14 26c0 3.3 2.7 6 6 6" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>'
+  },
+  suor: {
+    titulo: "À Prova de Suor",
+    sub: "Não Esverdeija",
+    svg: '<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="18" width="24" height="14" rx="3" fill="#C9A66B"/><path d="M14 18v-4a6 6 0 0112 0v4" stroke="#C9A66B" stroke-width="2.5" stroke-linecap="round"/><circle cx="20" cy="10" r="2" fill="#C9A66B"/><path d="M16 25l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  },
+  garantia: {
+    titulo: "Garantia Vitalícia",
+    sub: "Que Não Escurece",
+    svg: '<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 4L8 9v11c0 8 5.5 13.5 12 15 6.5-1.5 12-7 12-15V9L20 4z" fill="#C9A66B"/><path d="M14 20l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  }
+};
+
+function getBenefList(benefStr) {
+  if (!benefStr) return [];
+  return benefStr.split(",").map(function(b){ return b.trim(); }).filter(function(b){ return BENEF_DEFS[b]; });
+}
 
 // UPSERT individual de config — cria ou atualiza
 function upsertConfig(chave, valor) {
@@ -1236,7 +1312,7 @@ function carregarTudo() {
 
   sb("produtos", {
     filtros: "ativo=eq.true&order=ordem.asc,id.asc",
-    select:  "id,nome,descricao,preco,preco_promo,foto,fotos_extra,categoria,badge_escassez,ordem,tamanhos"
+    select:  "id,nome,descricao,preco,preco_promo,foto,fotos_extra,categoria,badge_escassez,ordem,tamanhos,beneficios"
   }).then(function(ps) {
     STATE.produtos = ps || [];
     cacheSet(CACHE_KEY_PROD, STATE.produtos);
@@ -1446,7 +1522,18 @@ function renderLoja(produtos) {
        + "<div class='card-nome'>" + p.nome + "</div>"
        + "<div class='card-desc'>" + p.descricao + "</div>"
        + "<div class='card-preco'>" + precoH + "</div>"
-       + "<div style='margin-top:10px;background:var(--ouro);color:white;text-align:center;padding:10px 12px;font-size:clamp(0.68rem,1.8vw,0.72rem);font-weight:500;letter-spacing:0.1em;text-transform:uppercase;'>Ver Detalhes ✦</div>"
+       + 
+       + (function(){
+           var bl = getBenefList(p.beneficios);
+           if (!bl.length) return "";
+           var icons = bl.map(function(k){
+             return "<span title='" + BENEF_DEFS[k].titulo + "'>"
+               + BENEF_DEFS[k].svg.replace("viewBox", "style='width:20px;height:20px;' viewBox")
+               + "</span>";
+           }).join("");
+           return "<div style='display:flex;gap:5px;padding:4px 0 6px;'>" + icons + "</div>";
+         })()
+       "<div style='margin-top:10px;background:var(--ouro);color:white;text-align:center;padding:10px 12px;font-size:clamp(0.68rem,1.8vw,0.72rem);font-weight:500;letter-spacing:0.1em;text-transform:uppercase;'>Ver Detalhes ✦</div>"
        + "</div></div>";
   }
   grid.innerHTML = h;
@@ -1688,7 +1775,7 @@ function carregarAdmin() {
   document.getElementById("admin-lista").innerHTML = "<p style='color:var(--cinza);text-align:center;padding:20px;'>Carregando...</p>";
   sb("produtos", {
     filtros: "ativo=eq.true&order=ordem.asc,id.asc",
-    select:  "id,nome,descricao,preco,preco_promo,foto,fotos_extra,categoria,badge_escassez,ordem,tamanhos"
+    select:  "id,nome,descricao,preco,preco_promo,foto,fotos_extra,categoria,badge_escassez,ordem,tamanhos,beneficios"
   }).then(function(ps) {
     STATE.produtos = ps || [];
     renderAdmin(ps);
@@ -1786,7 +1873,11 @@ function salvarProduto() {
   var foto4 = document.getElementById("p-foto4").value.trim();
   var fotosExtras = [foto2, foto3, foto4].filter(Boolean).join("|") || null;
   var tamanhos = document.getElementById("p-tamanhos").value.trim() || null;
-  var dados = { nome:nome, descricao:descricao, preco:preco, preco_promo:preco_promo, foto:foto, fotos_extra:fotosExtras, tamanhos:tamanhos, categoria:categoria, badge_escassez:badge, ordem:ordem };
+  var benefSelecionados = ["agua","suor","garantia"].filter(function(k){
+    var el = document.getElementById("benef-"+k);
+    return el && el.checked;
+  }).join(",") || null;
+  var dados = { nome:nome, descricao:descricao, preco:preco, preco_promo:preco_promo, foto:foto, fotos_extra:fotosExtras, tamanhos:tamanhos, beneficios:benefSelecionados, categoria:categoria, badge_escassez:badge, ordem:ordem };
   var p = id
     ? sb("produtos", { method:"PATCH", filtros:"id=eq."+id, prefer:"return=representation", body:dados })
     : sb("produtos", { method:"POST",  prefer:"return=representation", body:dados });
@@ -1818,6 +1909,12 @@ function editarProd(id) {
   document.getElementById("p-foto4").value = extras[2] || "";
   document.getElementById("form-titulo").textContent = "✏️ Editando: " + p.nome;
   document.getElementById("btn-cancelar-edicao").style.display = "";
+  // Preencher checkboxes de benefícios
+  var benefAtivos = getBenefList(p.beneficios || "");
+  ["agua","suor","garantia"].forEach(function(k) {
+    var el = document.getElementById("benef-"+k);
+    if (el) el.checked = benefAtivos.indexOf(k) !== -1;
+  });
   document.getElementById("form-titulo").scrollIntoView({ behavior:"smooth" });
 }
 
@@ -1832,6 +1929,10 @@ function removerProd(id) {
 function limparForm() {
   ["edit-id","p-nome","p-desc","p-preco","p-preco-promo","p-foto","p-foto2","p-foto3","p-foto4","p-badge","p-ordem","p-tamanhos"].forEach(function(id) { document.getElementById(id).value = ""; });
   document.getElementById("p-categoria").value = "";
+  ["agua","suor","garantia"].forEach(function(k){
+    var el = document.getElementById("benef-"+k);
+    if (el) el.checked = false;
+  });
   document.getElementById("form-titulo").textContent = "➕ Cadastrar Novo Produto";
   document.getElementById("btn-cancelar-edicao").style.display = "none";
 }
