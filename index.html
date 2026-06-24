@@ -746,19 +746,32 @@ footer{background:#111;}
 
       <div style="margin-bottom:12px;">
         <label class="admin-label">Fotos Extras (até 3 fotos adicionais)</label>
-        <div style="display:flex;flex-direction:column;gap:8px;" id="fotos-extra-wrap">
-          <div style="display:flex;gap:6px;align-items:center;">
-            <input type="url" id="p-foto2" class="admin-input" placeholder="Link da 2ª foto (opcional)"/>
-            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-foto2" accept="image/*" style="display:none;"/></label>
+        <div style="display:flex;flex-direction:column;gap:10px;" id="fotos-extra-wrap">
+
+          <div style="display:flex;gap:8px;align-items:center;">
+            <img id="prev-foto2" src="" style="width:52px;height:52px;object-fit:cover;border:1px solid var(--cinza-claro);border-radius:2px;display:none;flex-shrink:0;"/>
+            <input type="url" id="p-foto2" class="admin-input" placeholder="Link da 2ª foto (opcional)" style="flex:1;min-width:0;"/>
+            <label class="admin-btn azul" style="cursor:pointer;padding:10px 14px;font-size:0.78rem;white-space:nowrap;flex-shrink:0;">
+              📷<input type="file" id="up-foto2" accept="image/*" style="display:none;"/>
+            </label>
           </div>
-          <div style="display:flex;gap:6px;align-items:center;">
-            <input type="url" id="p-foto3" class="admin-input" placeholder="Link da 3ª foto (opcional)"/>
-            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-foto3" accept="image/*" style="display:none;"/></label>
+
+          <div style="display:flex;gap:8px;align-items:center;">
+            <img id="prev-foto3" src="" style="width:52px;height:52px;object-fit:cover;border:1px solid var(--cinza-claro);border-radius:2px;display:none;flex-shrink:0;"/>
+            <input type="url" id="p-foto3" class="admin-input" placeholder="Link da 3ª foto (opcional)" style="flex:1;min-width:0;"/>
+            <label class="admin-btn azul" style="cursor:pointer;padding:10px 14px;font-size:0.78rem;white-space:nowrap;flex-shrink:0;">
+              📷<input type="file" id="up-foto3" accept="image/*" style="display:none;"/>
+            </label>
           </div>
-          <div style="display:flex;gap:6px;align-items:center;">
-            <input type="url" id="p-foto4" class="admin-input" placeholder="Link da 4ª foto (opcional)"/>
-            <label class="admin-btn azul" style="cursor:pointer;padding:10px;font-size:0.75rem;white-space:nowrap;flex-shrink:0;">📷<input type="file" id="up-foto4" accept="image/*" style="display:none;"/></label>
+
+          <div style="display:flex;gap:8px;align-items:center;">
+            <img id="prev-foto4" src="" style="width:52px;height:52px;object-fit:cover;border:1px solid var(--cinza-claro);border-radius:2px;display:none;flex-shrink:0;"/>
+            <input type="url" id="p-foto4" class="admin-input" placeholder="Link da 4ª foto (opcional)" style="flex:1;min-width:0;"/>
+            <label class="admin-btn azul" style="cursor:pointer;padding:10px 14px;font-size:0.78rem;white-space:nowrap;flex-shrink:0;">
+              📷<input type="file" id="up-foto4" accept="image/*" style="display:none;"/>
+            </label>
           </div>
+
         </div>
       </div>
 
@@ -1923,9 +1936,16 @@ function editarProd(id) {
   document.getElementById("p-ordem").value        = p.ordem || 0;
   document.getElementById("p-tamanhos").value     = p.tamanhos || "";
   var extras = (p.fotos_extra || "").split("|");
-  document.getElementById("p-foto2").value = extras[0] || "";
-  document.getElementById("p-foto3").value = extras[1] || "";
-  document.getElementById("p-foto4").value = extras[2] || "";
+  ["2","3","4"].forEach(function(num, i) {
+    var url    = extras[i] || "";
+    var inputEl = document.getElementById("p-foto" + num);
+    var prevEl  = document.getElementById("prev-foto" + num);
+    if (inputEl) inputEl.value = url;
+    if (prevEl) {
+      if (url) { prevEl.src = url; prevEl.style.display = "block"; }
+      else { prevEl.src = ""; prevEl.style.display = "none"; }
+    }
+  });
   document.getElementById("form-titulo").textContent = "✏️ Editando: " + p.nome;
   document.getElementById("btn-cancelar-edicao").style.display = "";
   // Preencher checkboxes de benefícios
@@ -1946,7 +1966,14 @@ function removerProd(id) {
 }
 
 function limparForm() {
-  ["edit-id","p-nome","p-desc","p-preco","p-preco-promo","p-foto","p-foto2","p-foto3","p-foto4","p-badge","p-ordem","p-tamanhos"].forEach(function(id) { document.getElementById(id).value = ""; });
+  ["edit-id","p-nome","p-desc","p-preco","p-preco-promo","p-foto","p-foto2","p-foto3","p-foto4","p-badge","p-ordem","p-tamanhos"].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.value = "";
+  });
+  // Limpar previews das fotos extras
+  ["prev-foto-prod","prev-foto2","prev-foto3","prev-foto4"].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.src = ""; el.style.display = "none"; }
+  });
   document.getElementById("p-categoria").value = "";
   ["agua","suor","garantia"].forEach(function(k){
     var el = document.getElementById("benef-"+k);
@@ -2506,18 +2533,26 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Upload fotos extras produto
-  ["up-foto2","up-foto3","up-foto4"].forEach(function(upId) {
-    var el = document.getElementById(upId);
-    if (!el) return;
-    el.addEventListener("change", function() {
-      var inputId = upId.replace("up-", "p-");
-      var inputEl = document.getElementById(inputId);
-      uploadArquivo(this.files[0], "produtos", function(url) {
-        if (inputEl) inputEl.value = url;
-        toast("✓ Foto carregada!");
+  // Upload fotos extras produto — com preview
+  ["2","3","4"].forEach(function(num) {
+    var upEl    = document.getElementById("up-foto" + num);
+    var inputEl = document.getElementById("p-foto" + num);
+    var prevEl  = document.getElementById("prev-foto" + num);
+    if (upEl) {
+      upEl.addEventListener("change", function() {
+        uploadArquivo(this.files[0], "produtos", function(url) {
+          if (inputEl) inputEl.value = url;
+          if (prevEl) { prevEl.src = url; prevEl.style.display = "block"; }
+          toast("✓ Foto carregada!");
+        });
       });
-    });
+    }
+    if (inputEl && prevEl) {
+      inputEl.addEventListener("input", function() {
+        if (this.value) { prevEl.src = this.value; prevEl.style.display = "block"; }
+        else { prevEl.src = ""; prevEl.style.display = "none"; }
+      });
+    }
   });
 
   // Upload vídeo hero
